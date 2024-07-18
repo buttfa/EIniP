@@ -25,7 +25,8 @@ void printfIni(ini* ini_ptr) {
  */
 iniParseStat iniParse(FILE* stream, ini* ini_ptr) {
     // 创建iniParseStat结构体
-    iniParseStat p_stat = {0};
+    iniParseStat p_stat;
+    memset(&p_stat, 0, sizeof(iniParseStat));
 
     // 检查stream是否为空
     if (stream == NULL) {
@@ -37,34 +38,34 @@ iniParseStat iniParse(FILE* stream, ini* ini_ptr) {
     if (ini_ptr == NULL) {
         ini_ptr = (ini*)malloc(sizeof(ini));
     }
+    memset(ini_ptr, 0, sizeof(ini));
 
     char buf[1024];              // 缓存区
     section *section_ptr = NULL; // section指针
     int row = 0;                 // 行数
     while (fgets(buf, sizeof(buf), stream) != NULL) {
+        // 去除行首和行尾的空格及行尾的回车符
+        char* tmp = trim(buf);
         row++;
         // 跳过注释行
-        if (buf[0] == '#' || buf[0] == ';') {
+        if (tmp[0] == '#' || tmp[0] == ';') {
             continue;
         }
 
-        // 将buf末尾的'\n'去掉
-        buf[strlen(buf) - 1] = '\0';
-
         // 判断是否是section
-        if (buf[0] == '[' && buf[strlen(buf) - 1] == ']') {
+        if (tmp[0] == '[' && tmp[strlen(tmp) - 1] == ']') {
             // 提取section名称
-            buf[strlen(buf) - 1] = '\0';
+            tmp[strlen(tmp) - 1] = '\0';
             
             // 如果section已存在，则使section_ptr指向对应的section
-            if ((section_ptr=iniGetSection(ini_ptr, buf+1)) != NULL)
+            if ((section_ptr=iniGetSection(ini_ptr, tmp+1)) != NULL)
                 continue;
 
             
             // 否则，分配新section内存
             section_ptr = (section*)malloc(sizeof(section));
             memset(section_ptr, 0, sizeof(section));
-            section_ptr->name = strdup(buf + 1);
+            section_ptr->name = strdup(tmp + 1);
             // 将section添加到ini中
             iniAddSection(ini_ptr, section_ptr);
 
@@ -76,13 +77,13 @@ iniParseStat iniParse(FILE* stream, ini* ini_ptr) {
         // 判断是否是key-value
         int index = 0, key_index = 0, value_index = 0;
         // 找到key_index 
-        char* equal_pos = strchr(buf, '=');
+        char* equal_pos = strchr(tmp, '=');
         if (equal_pos == NULL)
             continue;
         
         // 将key-value添加到section中
         *equal_pos = '\0';
-        iniAddKey(section_ptr, trim(buf), trim(equal_pos+1));
+        iniAddKey(section_ptr, trim(tmp), trim(equal_pos+1));
 
         // 清空缓存区
         memset(buf, 0, sizeof(buf));
