@@ -120,7 +120,7 @@ typedef struct INI{
 |iniStat iniAddKey(section* section_ptr ,char* key ,char* value)|在section_ptr中添加key-value pair，若已存在时之前的kvp仍会保留，新的kvp会被添加在kvps尾部。当使用iniGetValue函数时，会获取最后一个同键名的kvp的value，实现类似覆盖的效果。||
 <!--|iniStat iniAddKey(ini* ini_ptr ,char* section_name ,char* key ,char* value)|在ini_ptr中添加section_name的section，并添加key-value pair，若已存在则修改value||-->
 <!--|initStat iniCreate(ini* ini_ptr)|创建ini_ptr指向的ini结构体，并初始化其成员||-->
-
+ 
 #### 三、删除操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
