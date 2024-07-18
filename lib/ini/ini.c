@@ -1,6 +1,22 @@
 #include "ini.h"
 
 /**
+ * @brief 打印ini结构体
+ * 
+ * @param ini_ptr 
+ */
+void printfIni(ini* ini_ptr) {
+    printf("Ini:\n");
+    printf("section_num: %d\n", ini_ptr->section_num);
+    for (int i = 0; i < ini_ptr->section_num; i++) {
+        printf("section_name: %s\n", ini_ptr->sections[i]->name);
+        for (int j = 0; j < ini_ptr->sections[i]->kvp_num; j++) {
+            printf("key: %s, value: %s\n", ini_ptr->sections[i]->kvps[j]->key, ini_ptr->sections[i]->kvps[j]->value);
+        }
+    }
+}
+
+/**
  * @brief 读取stream流，并解析成ini结构体
  * 
  * @param stream 
@@ -12,7 +28,7 @@ iniParseStat iniParse(FILE* stream, ini* ini_ptr) {
     iniParseStat p_stat = {0};
 
     // 检查stream是否为空
-    if (stream != NULL) {
+    if (stream == NULL) {
         p_stat.stat = INI_ERR_STREAM_NOT_FOUND;
         return p_stat;
     }
@@ -32,10 +48,13 @@ iniParseStat iniParse(FILE* stream, ini* ini_ptr) {
             continue;
         }
 
+        // 将buf末尾的'\n'去掉
+        buf[strlen(buf) - 1] = '\0';
+
         // 判断是否是section
-        if (buf[0] == '[' && buf[strlen(buf) - 2] == ']') {
+        if (buf[0] == '[' && buf[strlen(buf) - 1] == ']') {
             // 提取section名称
-            buf[strlen(buf) - 2] = '\0';
+            buf[strlen(buf) - 1] = '\0';
             
             // 如果section已存在，则使section_ptr指向对应的section
             if ((section_ptr=iniGetSection(ini_ptr, buf+1)) != NULL)
@@ -48,29 +67,88 @@ iniParseStat iniParse(FILE* stream, ini* ini_ptr) {
             section_ptr->name = strdup(buf + 1);
             // 将section添加到ini中
             iniAddSection(ini_ptr, section_ptr);
-            ini_ptr->section_num++;
+
+            // 清空缓存区
+            memset(buf, 0, sizeof(buf));
+            continue;
         }
 
         // 判断是否是key-value
-        int num = 0;
-        char** tokens = splitStringBySpace(buf, &num);
-        if (num >= 3 && strcmp(tokens[1],"=")==0) {
-            // 找到=后的第一个字符的地址
-            int index = 0;
-            while (buf[index] != '=') index++;
-            while (buf[index] != ' ') index++;
-
-            // 将key-value添加到section中
-            iniAddKey(section_ptr, strdup(tokens[0]), strdup(buf + index));
-            section_ptr->kvp_num++;
-        }
-        freeSplitResult(tokens);
+        int index = 0, key_index = 0, value_index = 0;
+        // 找到key_index 
+        char* equal_pos = strchr(buf, '=');
+        if (equal_pos == NULL)
+            continue;
+        
+        // 将key-value添加到section中
+        *equal_pos = '\0';
+        iniAddKey(section_ptr, trim(buf), trim(equal_pos+1));
 
         // 清空缓存区
         memset(buf, 0, sizeof(buf));
     }
+    return p_stat;
+}
+/**
+ * @brief 获取指定section
+ * 
+ * @param ini_ptr 
+ * @param section_name 
+ * @return section* 
+ */
+section* iniGetSection(ini* ini_ptr ,char* section_name) {
+    // 检查ini_ptr是否为空指针
+    if (ini_ptr == NULL)
+        return NULL;
+    
+    // 遍历ini中的section
+    for (int i = 0; i < ini_ptr->section_num; i++) {
+        if (strcmp(ini_ptr->sections[i]->name, section_name) == 0) {
+            return ini_ptr->sections[i];
+        }
+    }
+
+    return NULL;
 }
 
+/**
+ * @brief 将section添加到ini中
+ * 
+ * @param ini_ptr 
+ * @param section_ptr 
+ * @return iniStat 
+ */
+iniStat iniAddSection(ini* ini_ptr , section* section_ptr) {
+    // 检查ini_ptr是否为空指针
+    if (ini_ptr == NULL)
+        return INI_ERR_INI_NOT_FOUND;
+    
+    // 添加section
+    ini_ptr->section_num++;
+    ini_ptr->sections = (section**)realloc(ini_ptr->sections, sizeof(section*) * ini_ptr->section_num);
+    ini_ptr->sections[ini_ptr->section_num - 1] = section_ptr;
+}
+
+/**
+ * @brief 将key-value对添加到section中
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @param value 
+ * @return iniStat 
+ */
+iniStat iniAddKey(section* section_ptr ,char* key ,char* value) {
+    // 检查section_ptr是否为空指针
+    if (section_ptr == NULL) 
+        return INI_ERR_SECTION_NOT_FOUND;
+    
+    // 添加key-value对
+    section_ptr->kvp_num++;
+    section_ptr->kvps = (kvp**)realloc(section_ptr->kvps, sizeof(kvp*) * section_ptr->kvp_num);
+    section_ptr->kvps[section_ptr->kvp_num - 1] = (kvp*)malloc(sizeof(kvp));
+    section_ptr->kvps[section_ptr->kvp_num - 1]->key = strdup(key);
+    section_ptr->kvps[section_ptr->kvp_num - 1]->value = strdup(value);
+}
 /**
  * @brief 提取input_str中的子字符串，以空格为分隔符
  * 
@@ -156,4 +234,32 @@ void freeSplitResult(char **splitResult) {
         }
         free(splitResult);
     }
+}
+
+/**
+ * @brief 去除字符串前后的空格
+ * 
+ * @param str 
+ * @return char* 
+ */
+char* trim(char *str) {
+    if (str == NULL)
+        return NULL;
+
+    char *end;
+    
+    // 去除前导空格
+    while(isspace((unsigned char)*str)) str++;
+    
+    if(*str == 0)  // 字符串为空的情况
+        return str;
+    
+    // 去除后导空格
+    end = str + strlen(str) - 1;
+    while(end > str && isspace((unsigned char)*end)) end--;
+    
+    // 将结尾的'\0'放回正确的位置
+    end[1] = '\0';
+    
+    return str;
 }

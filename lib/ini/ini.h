@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 /**
  * @brief 定义了EINIP函数的返回值
@@ -14,6 +15,8 @@ typedef enum INISTAT{
     INI_WARN = 0x40, // 0100_0000
     INI_ERR = 0x80, // 1000_0000
     INI_ERR_STREAM_NOT_FOUND,
+    INI_ERR_INI_NOT_FOUND,
+    INI_ERR_SECTION_NOT_FOUND
 }iniStat;
 
 /**
@@ -48,7 +51,7 @@ typedef struct KVP{
 typedef struct SECTION{
     char* name;
     int kvp_num;
-    struct KVP* kvps[];
+    struct KVP** kvps;
 }section;
 
 /**
@@ -57,8 +60,15 @@ typedef struct SECTION{
  */
 typedef struct INI{ 
     int section_num;
-    struct SECTION* sections[];
+    struct SECTION** sections;
 }ini;
+
+/**
+ * @brief 打印ini结构体
+ * 
+ * @param ini_ptr 
+ */
+void printfIni(ini* ini_ptr);
 
 /**
  * @brief 读取stream流，并解析成ini结构体
@@ -68,6 +78,34 @@ typedef struct INI{
  * @return iniParseStat 
  */
 iniParseStat iniParse(FILE* stream, ini* ini_ptr);
+
+/**
+ * @brief 获取指定section
+ * 
+ * @param ini_ptr 
+ * @param section_name 
+ * @return section* 
+ */
+section* iniGetSection(ini* ini_ptr ,char* section_name);
+
+/**
+ * @brief 将section添加到ini中
+ * 
+ * @param ini_ptr 
+ * @param section_ptr 
+ * @return iniStat 
+ */
+iniStat iniAddSection(ini* ini_ptr , section* section_ptr);
+
+/**
+ * @brief 将key-value对添加到section中
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @param value 
+ * @return iniStat 
+ */
+iniStat iniAddKey(section* section_ptr ,char* key ,char* value);
 
 /**
  * @brief 提取input_str中的子字符串，以空格为分隔符
@@ -84,4 +122,12 @@ char** splitStringBySpace(char* input_str, int* out_num_tokens);
  * @param splitResult 
  */
 void freeSplitResult(char **splitResult);
+
+/**
+ * @brief 去除字符串前后的空格
+ * 
+ * @param str 
+ * @return char* 
+ */
+char* trim(char *str);
 #endif
