@@ -54,6 +54,48 @@ TEST(testIniParse, test2) {
     testIniParse(p_stat, ini_t, expections);
 }
 
+TEST(testIniParse, test3_the_same_section_name) {
+    // 初始化测试用例
+    char* str = (char*)"[section1]\nkey1 = value1\n  [section1]   \n  \n key2= value2\n";
+    char* expections[] = {(char*)"section1",(char*)"key1",(char*)"value1", (char*)"key2", (char*)"value2"};
+    
+    // 运行结果
+    FILE* stream = fmemopen(str, strlen(str), "r");
+    ini ini_t;
+    iniParseStat p_stat = iniParse(stream, &ini_t);
+
+    // 检测结果
+    testIniParse(p_stat, ini_t, expections);
+}
+
+TEST(testIniParse, test4_the_same_key_name) {
+    // 初始化测试用例
+    char* str = (char*)"[section1]\nkey1 = value1\n    \n  \n key1= Change\n";
+    char* expections[] = {(char*)"section1",(char*)"key1",(char*)"Change"};
+    
+    // 运行结果
+    FILE* stream = fmemopen(str, strlen(str), "r");
+    ini ini_t;
+    iniParseStat p_stat = iniParse(stream, &ini_t);
+
+    // 检测结果
+    testIniParse(p_stat, ini_t, expections);
+}
+
+TEST(testIniParse, test5_the_same_key_and_section_name) {
+    // 初始化测试用例
+    char* str = (char*)"[section1]\nkey1 = value1\n key2=value2\n [section1]  \n  \n key2= Change\n";
+    char* expections[] = {(char*)"section1",(char*)"key1",(char*)"value1",(char*)"key2",(char*)"Change"};
+    
+    // 运行结果
+    FILE* stream = fmemopen(str, strlen(str), "r");
+    ini ini_t;
+    iniParseStat p_stat = iniParse(stream, &ini_t);
+
+    // 检测结果
+    testIniParse(p_stat, ini_t, expections);
+}
+
 TEST(testIniParse, empty_str) {
     // 初始化测试用例
     char* str = (char*)"    \n   \n   \n   \n";
@@ -110,7 +152,7 @@ void testIniParse(iniParseStat &p_stat, ini &ini_t, char**expections)
 
     // 比较结果
     int index = 0;
-    cout << "section num: " << ini_t.section_num << endl << endl;
+    cout << "section num: " << ini_t.section_num << endl;
     for (int i = 0; i < ini_t.section_num; i++)
     {
         // 比较section
@@ -125,6 +167,5 @@ void testIniParse(iniParseStat &p_stat, ini &ini_t, char**expections)
             EXPECT_STREQ(kvp_ptr->key, expections[index++]);
             EXPECT_STREQ(kvp_ptr->value, expections[index++]);
         }
-        cout << endl;
     }
 }

@@ -6,13 +6,13 @@
  * @param ini_ptr 
  */
 void printfIni(ini* ini_ptr) {
-    printf("Ini:\n");
-    printf("section_num: %d\n", ini_ptr->section_num);
+    printf("section_num: %d\n\n", ini_ptr->section_num);
     for (int i = 0; i < ini_ptr->section_num; i++) {
-        printf("section_name: %s\n", ini_ptr->sections[i]->name);
+        printf("section_name: %s, kvp_num: %d\n", ini_ptr->sections[i]->name, ini_ptr->sections[i]->kvp_num);
         for (int j = 0; j < ini_ptr->sections[i]->kvp_num; j++) {
             printf("key: %s, value: %s\n", ini_ptr->sections[i]->kvps[j]->key, ini_ptr->sections[i]->kvps[j]->value);
         } 
+        printf("\n");
     }
 }
 
@@ -42,6 +42,7 @@ iniParseStat iniParse(FILE* stream, ini* ini_ptr) {
 
     char buf[1024];              // 缓存区
     section *section_ptr = NULL; // section指针
+    kvp* kvp_ptr = NULL;         // kvp指针
     int row = 0;                 // 行数
     while (fgets(buf, sizeof(buf), stream) != NULL) {
         // 去除行首和行尾的空格及行尾的回车符
@@ -74,16 +75,25 @@ iniParseStat iniParse(FILE* stream, ini* ini_ptr) {
             continue;
         }
 
-        // 判断是否是key-value
         int index = 0, key_index = 0, value_index = 0;
-        // 找到key_index 
+        // 找到=字符
         char* equal_pos = strchr(tmp, '=');
         if (equal_pos == NULL)
             continue;
         
-        // 将key-value添加到section中
+        // 判断是否是key-value，如果不满足条件，则跳过
         *equal_pos = '\0';
-        iniAddKey(section_ptr, trim(tmp), trim(equal_pos+1));
+        if (strlen(trim(tmp)) == 0 || strlen(trim(equal_pos+1)) == 0)
+            continue;
+        
+        // 将key-value添加到section中
+        if (iniGetKvp(section_ptr, trim(tmp)) == NULL) {
+            // 添加key-value对
+            iniAddKey(section_ptr, trim(tmp), trim(equal_pos+1));
+        } else {
+            // 更新key-value对
+            iniSetValue(section_ptr, trim(tmp), trim(equal_pos+1));
+        }
 
         // 清空缓存区
         memset(buf, 0, sizeof(buf));
@@ -103,13 +113,80 @@ section* iniGetSection(ini* ini_ptr ,char* section_name) {
         return NULL;
     
     // 遍历ini中的section
-    for (int i = 0; i < ini_ptr->section_num; i++) {
+    for (int i = ini_ptr->section_num-1; i >= 0; i--) {
         if (strcmp(ini_ptr->sections[i]->name, section_name) == 0) {
             return ini_ptr->sections[i];
         }
     }
 
     return NULL;
+}
+
+/**
+ * @brief 获取指定key对应的value
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @return char* 
+ */
+char* iniGetValue(section* section_ptr ,char* key) {
+    // 检查section_ptr是否为空指针
+    if (section_ptr == NULL)
+        return NULL;
+
+    // 遍历section中的key-value对
+    for (int i = section_ptr->kvp_num-1; i >= 0; i--) {
+        if (strcmp(section_ptr->kvps[i]->key, key) == 0) {
+            return section_ptr->kvps[i]->value;
+        }
+    }
+
+    return NULL;
+}
+
+/**
+ * @brief 获取指定key对应的kvp
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @return kvp* 
+ */
+kvp* iniGetKvp(section* section_ptr ,char* key) {
+    // 检查section_ptr是否为空指针
+    if (section_ptr == NULL)
+        return NULL;
+
+    // 遍历section中的key-value对
+    for (int i = section_ptr->kvp_num-1; i >= 0; i--) {
+        if (strcmp(section_ptr->kvps[i]->key, key) == 0) {
+            return section_ptr->kvps[i];
+        }
+    }
+    return NULL;
+}
+
+/**
+ * @brief 设置指定key对应的value
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @param value 
+ * @return iniStat 
+ */
+iniStat iniSetValue(section* section_ptr ,char* key ,char* value) {
+    // 检查section_ptr是否为空指针
+    if (section_ptr == NULL)
+        return INI_ERR_SECTION_NOT_FOUND;
+
+    // 遍历section中的key-value对
+    for (int i = section_ptr->kvp_num-1; i >= 0; i--) {
+        if (strcmp(section_ptr->kvps[i]->key, key) == 0) {
+            // 更新value
+            free(section_ptr->kvps[i]->value);
+            section_ptr->kvps[i]->value = strdup(value);
+            return INI_OK;
+        }
+    }
 }
 
 /**

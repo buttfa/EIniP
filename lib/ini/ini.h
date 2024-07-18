@@ -89,6 +89,34 @@ iniParseStat iniParse(FILE* stream, ini* ini_ptr);
 section* iniGetSection(ini* ini_ptr ,char* section_name);
 
 /**
+ * @brief 获取指定key对应的value
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @return char* 
+ */
+char* iniGetValue(section* section_ptr ,char* key);
+
+/**
+ * @brief 获取指定key对应的kvp
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @return kvp* 
+ */
+kvp* iniGetKvp(section* section_ptr ,char* key);
+
+/**
+ * @brief 设置指定key对应的value
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @param value 
+ * @return iniStat 
+ */
+iniStat iniSetValue(section* section_ptr ,char* key ,char* value);
+
+/**
  * @brief 将section添加到ini中
  * 
  * @param ini_ptr 
