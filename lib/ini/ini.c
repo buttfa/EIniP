@@ -12,7 +12,7 @@ void printfIni(ini* ini_ptr) {
         printf("section_name: %s\n", ini_ptr->sections[i]->name);
         for (int j = 0; j < ini_ptr->sections[i]->kvp_num; j++) {
             printf("key: %s, value: %s\n", ini_ptr->sections[i]->kvps[j]->key, ini_ptr->sections[i]->kvps[j]->value);
-        }
+        } 
     }
 }
 
