@@ -100,6 +100,41 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
     }
     return p_stat;
 }
+
+/**
+ * @brief 释放ini内存
+ * 
+ * @param ini_ptr 
+ * @return iniStat 
+ */
+iniStat iniFree(ini* ini_ptr) {
+    if (ini_ptr == NULL) {
+        return INI_ERR_INI_NOT_FOUND;
+    }
+
+    // 遍历并释放所有section
+    for (int i = 0; i < ini_ptr->section_num; i++) {
+        section* sec = ini_ptr->sections[i];
+        
+        // 遍历并释放所有key-value对
+        for (int j = 0; j < sec->kvp_num; j++) {
+            kvp* kv = sec->kvps[j];
+            free(kv->key); // 释放key内存
+            free(kv->value); // 释放value内存
+            free(kv); // 释放kvp结构体内存
+        }
+        
+        free(sec->kvps); // 释放kvp数组内存
+        free(sec->name); // 释放section名称内存
+        free(sec); // 释放section结构体内存
+    }
+    
+    free(ini_ptr->sections); // 释放section数组内存
+    free(ini_ptr); // 最后释放ini结构体内存
+
+    return INI_OK;
+}
+
 /**
  * @brief 获取指定section
  * 

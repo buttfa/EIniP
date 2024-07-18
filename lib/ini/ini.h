@@ -80,6 +80,14 @@ void printfIni(ini* ini_ptr);
 iniParseStat iniParse(FILE* stream, ini** ini_ptr);
 
 /**
+ * @brief 释放ini内存
+ * 
+ * @param ini_ptr 
+ * @return iniStat 
+ */
+iniStat iniFree(ini* ini_ptr);
+
+/**
  * @brief 获取指定section
  * 
  * @param ini_ptr 

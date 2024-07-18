@@ -24,6 +24,7 @@ TEST(testIniParse, test0) {
     
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, test1) {
@@ -38,6 +39,7 @@ TEST(testIniParse, test1) {
     
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, test2) {
@@ -52,6 +54,7 @@ TEST(testIniParse, test2) {
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, test3_the_same_section_name) {
@@ -66,6 +69,7 @@ TEST(testIniParse, test3_the_same_section_name) {
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, test4_the_same_key_name) {
@@ -80,6 +84,7 @@ TEST(testIniParse, test4_the_same_key_name) {
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, test5_the_same_key_and_section_name) {
@@ -94,6 +99,7 @@ TEST(testIniParse, test5_the_same_key_and_section_name) {
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, test6) {
@@ -113,6 +119,7 @@ TEST(testIniParse, test6) {
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, empty_str) {
@@ -127,6 +134,7 @@ TEST(testIniParse, empty_str) {
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, empty_ini) {
@@ -141,6 +149,7 @@ TEST(testIniParse, empty_ini) {
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 TEST(testIniParse, note) {
@@ -155,6 +164,7 @@ TEST(testIniParse, note) {
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
+    iniFree(ini_t);
 }
 
 /**
