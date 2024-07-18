@@ -10,7 +10,7 @@ using namespace std;
  * @param ini_t 
  * @param expections 
  */
-void testIniParse(iniParseStat &p_stat, ini &ini_t, char**expections);
+void testIniParse(iniParseStat &p_stat, ini* ini_t, char**expections);
 
 TEST(testIniParse, test0) {
     // 初始化测试用例
@@ -19,8 +19,8 @@ TEST(testIniParse, test0) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
     
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -33,8 +33,8 @@ TEST(testIniParse, test1) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
     
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -47,8 +47,8 @@ TEST(testIniParse, test2) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -61,8 +61,8 @@ TEST(testIniParse, test3_the_same_section_name) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -75,8 +75,8 @@ TEST(testIniParse, test4_the_same_key_name) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -89,8 +89,27 @@ TEST(testIniParse, test5_the_same_key_and_section_name) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
+
+    // 检测结果
+    testIniParse(p_stat, ini_t, expections);
+}
+
+TEST(testIniParse, test6) {
+    // 初始化测试用例
+    char* str = (char*)"[section1]\nkey1 = value1\n key2=value2\n[another_section]\n pp_ke=qq_va \n[section1]  \n  \n key2= Change\n";
+    char* expections[] = {(char*)"section1",
+                        (char*)"key1",(char*)"value1",
+                        (char*)"key2",(char*)"Change",
+                        
+                        (char*)"another_section",
+                        (char*)"pp_ke",(char*)"qq_va"};
+    
+    // 运行结果
+    FILE* stream = fmemopen(str, strlen(str), "r");
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -103,8 +122,8 @@ TEST(testIniParse, empty_str) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -117,8 +136,8 @@ TEST(testIniParse, empty_ini) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -131,8 +150,8 @@ TEST(testIniParse, note) {
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
-    ini ini_t;
-    iniParseStat p_stat = iniParse(stream, &ini_t);
+    ini* ini_t = NULL;
+    iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
     testIniParse(p_stat, ini_t, expections);
@@ -145,18 +164,18 @@ TEST(testIniParse, note) {
  * @param ini_t 
  * @param expections 
  */
-void testIniParse(iniParseStat &p_stat, ini &ini_t, char**expections)
+void testIniParse(iniParseStat &p_stat, ini* ini_t, char**expections)
 {
     // 判断是否解析成功
     EXPECT_EQ(p_stat.stat == INI_OK, true);
 
     // 比较结果
     int index = 0;
-    cout << "section num: " << ini_t.section_num << endl;
-    for (int i = 0; i < ini_t.section_num; i++)
+    cout << "section num: " << ini_t->section_num << endl;
+    for (int i = 0; i < ini_t->section_num; i++)
     {
         // 比较section
-        section *section_ptr = ini_t.sections[i];
+        section *section_ptr = ini_t->sections[i];
         cout << "section name: " << section_ptr->name << ", kvp num:" << section_ptr->kvp_num << endl;
         EXPECT_STREQ(section_ptr->name, expections[index++]);
         for (int j = 0; j < section_ptr->kvp_num; j++)

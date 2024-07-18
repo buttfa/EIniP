@@ -77,7 +77,7 @@ void printfIni(ini* ini_ptr);
  * @param ini_ptr 
  * @return iniParseStat 
  */
-iniParseStat iniParse(FILE* stream, ini* ini_ptr);
+iniParseStat iniParse(FILE* stream, ini** ini_ptr);
 
 /**
  * @brief 获取指定section
