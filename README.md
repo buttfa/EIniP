@@ -110,7 +110,7 @@ typedef struct INI{
 <!--|iniStat iniSetValue(ini* ini_ptr ,char* section_name ,char* key ,char* value)|将ini_ptr中指定section_name的指定key的值设置为value，若段不存在则返回INI_ERR_SECTION_NOT_FOUND，若键值对不存在则返回INI_ERR_KEY_NOT_FOUND||-->
 
 
-
+ 
 #### 二、添加操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
