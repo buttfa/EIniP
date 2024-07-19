@@ -128,7 +128,7 @@ typedef struct INI{
 <!--|iniStat iniDelKey(ini* ini_ptr ,char* section_name ,char* key)|删除ini_ptr中指定section_name的section中的key-value pair，若不存在则返回INI_ERR_KEY_NOT_FOUND||-->
 
 <!--#### 四、合并操作相关函数-->
-
+ 
 #### 四、保存操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
