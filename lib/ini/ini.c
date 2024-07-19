@@ -271,6 +271,13 @@ iniStat iniAddKey(section* section_ptr ,char* key ,char* value) {
  * @return iniStat 返回操作的状态
  */
 iniStat iniDelSection(ini* ini_ptr, section* section_ptr) {
+    // 检查ini_ptr是否为空指针
+    if (ini_ptr == NULL)
+        return INI_ERR_INI_NOT_FOUND;
+    // 检查section_ptr是否为空指针
+    if (section_ptr == NULL)
+        return INI_ERR_SECTION_NOT_FOUND;
+
     // 遍历INI结构体中的sections数组，找到要删除的section的位置
     for (int i = 0; i < ini_ptr->section_num; i++) {
         if (ini_ptr->sections[i] == section_ptr) {
@@ -309,6 +316,13 @@ iniStat iniDelSection(ini* ini_ptr, section* section_ptr) {
  * @return iniStat 返回操作的状态
  */
 iniStat iniDelKey(section* section_ptr, char* key) {
+    // 检查section_ptr是否为空指针
+    if (section_ptr == NULL)
+        return INI_ERR_SECTION_NOT_FOUND;
+    // 检查key是否为空指针
+    if (key == NULL)
+        return INI_ERR_KEY_NOT_FOUND;
+
     // 遍历section中的kvps数组，查找给定的key
     for (int i = 0; i < section_ptr->kvp_num; i++) {
         if (strcmp(section_ptr->kvps[i]->key, key) == 0) {
