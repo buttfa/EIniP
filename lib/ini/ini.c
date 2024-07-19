@@ -262,6 +262,79 @@ iniStat iniAddKey(section* section_ptr ,char* key ,char* value) {
     section_ptr->kvps[section_ptr->kvp_num - 1]->key = strdup(key);
     section_ptr->kvps[section_ptr->kvp_num - 1]->value = strdup(value);
 }
+
+/**
+ * @brief 删除ini中的section
+ * 
+ * @param ini_ptr 指向INI结构体的指针
+ * @param section_ptr 指向SECTION结构体的指针，即要删除的section
+ * @return iniStat 返回操作的状态
+ */
+iniStat iniDelSection(ini* ini_ptr, section* section_ptr) {
+    // 遍历INI结构体中的sections数组，找到要删除的section的位置
+    for (int i = 0; i < ini_ptr->section_num; i++) {
+        if (ini_ptr->sections[i] == section_ptr) {
+            // 释放section中的kvps
+            for (int j = 0; j < section_ptr->kvp_num; j++) {
+                free(section_ptr->kvps[j]->key);
+                free(section_ptr->kvps[j]->value);
+                free(section_ptr->kvps[j]);
+            }
+            free(section_ptr->kvps);
+            free(section_ptr->name);
+            free(section_ptr);
+
+            // 移动后续的sections以填补空缺
+            for (int k = i; k < ini_ptr->section_num - 1; k++) {
+                ini_ptr->sections[k] = ini_ptr->sections[k + 1];
+            }
+
+            // 减少section的数量
+            ini_ptr->section_num--;
+
+            // 重新分配sections数组的大小
+            ini_ptr->sections = (section**)realloc(ini_ptr->sections, sizeof(section*) * ini_ptr->section_num);
+
+            return INI_OK; // 假设INI_SUCCESS是成功的状态码
+        }
+    }
+    return INI_ERR_SECTION_NOT_FOUND; // 假设INI_SECTION_NOT_FOUND是未找到section的状态码
+}
+
+/**
+ * @brief 删除section中的key-value对
+ * 
+ * @param section_ptr 指向SECTION结构体的指针
+ * @param key 要删除的key值
+ * @return iniStat 返回操作的状态
+ */
+iniStat iniDelKey(section* section_ptr, char* key) {
+    // 遍历section中的kvps数组，查找给定的key
+    for (int i = 0; i < section_ptr->kvp_num; i++) {
+        if (strcmp(section_ptr->kvps[i]->key, key) == 0) {
+            // 释放key和value的内存
+            free(section_ptr->kvps[i]->key);
+            free(section_ptr->kvps[i]->value);
+            // 释放kvp结构体的内存
+            free(section_ptr->kvps[i]);
+
+            // 移动后续的kvps以填补空缺
+            for (int j = i; j < section_ptr->kvp_num - 1; j++) {
+                section_ptr->kvps[j] = section_ptr->kvps[j + 1];
+            }
+
+            // 减少kvp的数量
+            section_ptr->kvp_num--;
+
+            // 重新分配kvps数组的大小
+            section_ptr->kvps = (kvp**)realloc(section_ptr->kvps, sizeof(kvp*) * section_ptr->kvp_num);
+
+            return INI_OK; // 成功删除key-value对
+        }
+    }
+    return INI_ERR_KEY_NOT_FOUND; // 未找到指定的key
+}
+
 /**
  * @brief 提取input_str中的子字符串，以空格为分隔符
  * 

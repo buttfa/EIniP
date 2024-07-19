@@ -16,7 +16,8 @@ typedef enum INISTAT{
     INI_ERR = 0x80, // 1000_0000
     INI_ERR_STREAM_NOT_FOUND,
     INI_ERR_INI_NOT_FOUND,
-    INI_ERR_SECTION_NOT_FOUND
+    INI_ERR_SECTION_NOT_FOUND,
+    INI_ERR_KEY_NOT_FOUND
 }iniStat;
 
 /**
@@ -142,6 +143,24 @@ iniStat iniAddSection(ini* ini_ptr , section* section_ptr);
  * @return iniStat 
  */
 iniStat iniAddKey(section* section_ptr ,char* key ,char* value);
+
+/**
+ * @brief 删除ini中的section
+ * 
+ * @param ini_ptr 
+ * @param section_ptr 
+ * @return iniStat 
+ */
+iniStat iniDelSection(ini* ini_ptr ,section* section_ptr);
+
+/**
+ * @brief 删除section中的key-value对
+ * 
+ * @param section_ptr 
+ * @param key 
+ * @return iniStat 
+ */
+iniStat iniDelKey(section* section_ptr ,char* key);
 
 /**
  * @brief 提取input_str中的子字符串，以空格为分隔符
