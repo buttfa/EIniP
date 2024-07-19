@@ -350,6 +350,87 @@ iniStat iniDelKey(section* section_ptr, char* key) {
 }
 
 /**
+ * @brief 将ini_ptr中的ini数据保存至file_path文件中
+ * 
+ * @param ini_ptr 
+ * @param file_path 
+ * @return iniStat 
+ */
+iniStat iniSaveFile(ini* ini_ptr, char* file_path) {
+    // 检查ini_ptr是否为空指针
+    if (ini_ptr == NULL) 
+        return INI_ERR_INI_NOT_FOUND;
+
+    // 检查file_path是否为空指针
+    if (file_path == NULL) 
+        return INI_ERR_FILE_OPEN;
+
+    // 打开文件
+    FILE* fp = fopen(file_path, "w");
+    if (fp == NULL) 
+        return INI_ERR_FILE_OPEN;
+
+    // 遍历sections数组，将每个section写入文件
+    for (int i = 0; i < ini_ptr->section_num; i++) {
+        section* sec = ini_ptr->sections[i];
+        fprintf(fp, "[%s]\n", sec->name);
+
+        // 遍历kvps数组，将每个key-value对写入文件
+        for (int j = 0; j < sec->kvp_num; j++) {
+            kvp* kv = sec->kvps[j];
+            fprintf(fp, "%s=%s\n", kv->key, kv->value);
+        }
+        fprintf(fp, "\n");
+    }
+
+    fclose(fp);
+    return INI_OK;
+}
+
+/**
+ * @brief 以字符串形式返回ini_ptr中的ini数据
+ * 
+ */
+char* iniSaveStr(ini* ini_ptr) {
+    // 检查ini_ptr是否为空
+    if (ini_ptr == NULL)
+        return NULL;
+
+    // 第一次遍历，计算字符串长度
+    int str_len = 0;
+    for (int i = 0; i < ini_ptr->section_num; i++) {
+        section* sec = ini_ptr->sections[i];
+        //         [                   ]   \n   \n(每个section结尾的\n)
+        str_len += 1+strlen(sec->name)+1 + 1  + 1;
+        for (int j = 0; j < sec->kvp_num; j++) {
+            kvp* kv = sec->kvps[j];
+            //                           =                      \n
+            str_len += strlen(kv->key) + 1 + strlen(kv->value) + 1;
+        }
+    }
+
+    // 第二次遍历，生成字符串
+    char* str = (char*)malloc(str_len + 1);
+    memset(str, 0, str_len + 1);
+    for (int i = 0; i < ini_ptr->section_num; i++) {
+        section* sec = ini_ptr->sections[i];
+        strcat(str, "[");
+        strcat(str, sec->name);
+        strcat(str, "]\n");
+        for (int j = 0; j < sec->kvp_num; j++) {
+            kvp* kv = sec->kvps[j];
+            strcat(str, kv->key);
+            strcat(str, "=");
+            strcat(str, kv->value);
+            strcat(str, "\n");
+        }
+        strcat(str, "\n");
+    }
+
+    return str;
+}
+
+/**
  * @brief 提取input_str中的子字符串，以空格为分隔符
  * 
  * @param input_str 

@@ -133,4 +133,4 @@ typedef struct INI{
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |iniStat iniSaveFile(ini* ini_ptr ,char* file_path)|将ini_ptr中的ini数据保存至file_path文件中||
-|iniStat iniSaveStr(ini* ini_ptr ,char* str)|将ini_ptr中的ini数据保存至str字符串中||
+|char* iniSaveStr(ini* ini_ptr)|以字符串形式返回ini_ptr中的ini数据，操作失败则返回NULL。|返回的字符串为动态分配所得，请在使用完后及时释放。|

@@ -17,7 +17,8 @@ typedef enum INISTAT{
     INI_ERR_STREAM_NOT_FOUND,
     INI_ERR_INI_NOT_FOUND,
     INI_ERR_SECTION_NOT_FOUND,
-    INI_ERR_KEY_NOT_FOUND
+    INI_ERR_KEY_NOT_FOUND,
+    INI_ERR_FILE_OPEN
 }iniStat;
 
 /**
@@ -161,6 +162,21 @@ iniStat iniDelSection(ini* ini_ptr ,section* section_ptr);
  * @return iniStat 
  */
 iniStat iniDelKey(section* section_ptr ,char* key);
+
+/**
+ * @brief 将ini_ptr中的ini数据保存至file_path文件中
+ * 
+ * @param ini_ptr 
+ * @param file_path 
+ * @return iniStat 
+ */
+iniStat iniSaveFile(ini* ini_ptr ,char* file_path);
+
+/**
+ * @brief 以字符串形式返回ini_ptr中的ini数据
+ * 
+ */
+char* iniSaveStr(ini* ini_ptr);
 
 /**
  * @brief 提取input_str中的子字符串，以空格为分隔符
