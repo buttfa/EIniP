@@ -74,6 +74,20 @@ typedef struct INI{
 void printfIni(ini* ini_ptr);
 
 /**
+ * @brief 解析file_path文件，并返回解析结果。解析时，section合并、键值对覆盖。
+ * 
+ * @param file_path 
+ * @return ini* 
+ */
+ini* iniParseFile(char* file_path);
+
+/**
+ * @brief 解析str字符串，并返回解析结果。解析时，section合并、键值对覆盖。
+ * 
+ */
+ini* iniParseStr(char* str);
+
+/**
  * @brief 读取stream流，并解析成ini结构体
  * 
  * @param stream 

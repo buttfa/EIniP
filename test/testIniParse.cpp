@@ -156,3 +156,156 @@ TEST(testParse, note) {
     checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
+
+TEST(testParseFile, test0) {
+    // 1. 初始化测试用例
+    char* test_str = (char*)"[section1]\nkey1=value1\nkey2=value2\n";
+    char* expections[] = {(char*)"section1", 
+                            (char*)"key1", (char*)"value1",
+                            (char*)"key2", (char*)"value2"};
+
+    // 2. 创建测试用ini
+    FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
+    ini* test_ini = NULL; 
+    iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
+    
+    // 3. 保存和释放测试用ini
+    iniSaveFile(test_ini, "test.ini");
+    fclose(test_stream);
+    iniFree(test_ini);
+
+    // 4. 读取测试用ini
+    ini* target_ini = iniParseFile("test.ini");
+
+    // 5. 检测结果
+    checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
+    iniFree(target_ini);
+    remove("test.ini");
+}
+
+TEST(testParseFile, test1) {
+    // 1. 初始化测试用例
+    char* test_str = (char*)"[section1]\nkey1=value1\nkey2=value2\n";
+    char* expections[] = {(char*)"section1", 
+                            (char*)"key2", (char*)"value2"};
+
+    // 2. 创建测试用ini
+    FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
+    ini* test_ini = NULL; 
+    iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
+    iniDelKey(iniGetSection(test_ini, "section1"), "key1");
+    
+    // 3. 保存和释放测试用ini
+    iniSaveFile(test_ini, "test.ini");
+    fclose(test_stream);
+    iniFree(test_ini);
+
+    // 4. 读取测试用ini
+    ini* target_ini = iniParseFile("test.ini");
+
+    // 5. 检测结果
+    checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
+    iniFree(target_ini);
+    remove("test.ini");
+}
+
+TEST(testParseFile, test2) {
+    // 1. 初始化测试用例
+    char* test_str = (char*)"[section1]\nkey1=value1\nkey2=value2\n";
+    char* expections[] = {};
+
+    // 2. 创建测试用ini
+    FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
+    ini* test_ini = NULL; 
+    iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
+    iniDelKey(iniGetSection(test_ini, "section1"), "key1");
+    iniDelSection(test_ini, "section1");
+    
+    // 3. 保存和释放测试用ini
+    iniSaveFile(test_ini, "test.ini");
+    fclose(test_stream);
+    iniFree(test_ini);
+
+    // 4. 读取测试用ini
+    ini* target_ini = iniParseFile("test.ini");
+
+    // 5. 检测结果
+    checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
+    iniFree(target_ini);
+    remove("test.ini");
+}
+
+TEST(testParseStr, test0) {
+    // 1. 初始化测试用例
+    char* test_str = (char*)"[section1]\nkey1=value1\nkey2=value2\n";
+    char* expections[] = {(char*)"section1", 
+                            (char*)"key1", (char*)"value1",
+                            (char*)"key2", (char*)"value2"};
+
+    // 2. 创建测试用ini
+    FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
+    ini* test_ini = NULL; 
+    iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
+    
+    // 3. 保存和释放测试用ini
+    char* target_str = iniSaveStr(test_ini);
+    fclose(test_stream);
+    iniFree(test_ini);
+
+    // 4. 读取测试用ini
+    ini* target_ini = iniParseStr(target_str);
+
+    // 5. 检测结果
+    checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
+    iniFree(target_ini);
+}
+
+TEST(testParseStr, test1) {
+    // 1. 初始化测试用例
+    char* test_str = (char*)"[section1]\nkey1=value1\nkey2=value2\n";
+    char* expections[] = {(char*)"section1", 
+                            (char*)"key2", (char*)"value2"};
+
+    // 2. 创建测试用ini
+    FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
+    ini* test_ini = NULL; 
+    iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
+    iniDelKey(iniGetSection(test_ini, "section1"), "key1");
+    
+    // 3. 保存和释放测试用ini
+    char* target_str = iniSaveStr(test_ini);
+    fclose(test_stream);
+    iniFree(test_ini);
+
+    // 4. 读取测试用ini
+    ini* target_ini = iniParseStr(target_str);
+
+    // 5. 检测结果
+    checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
+    iniFree(target_ini);
+}
+
+TEST(testParseStr, test2) {
+    // 1. 初始化测试用例
+    char* test_str = (char*)"[section1]\nkey1=value1\nkey2=value2\n";
+    char* expections[] = {};
+
+    // 2. 创建测试用ini
+    FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
+    ini* test_ini = NULL; 
+    iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
+    iniDelKey(iniGetSection(test_ini, "section1"), "key1");
+    iniDelSection(test_ini, "section1");
+    
+    // 3. 保存和释放测试用ini
+    char* target_str = iniSaveStr(test_ini);
+    fclose(test_stream);
+    iniFree(test_ini);
+
+    // 4. 读取测试用ini
+    ini* target_ini = iniParseStr(target_str);
+
+    // 5. 检测结果
+    checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
+    iniFree(target_ini);
+}

@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "ini.h"
 
 /**
@@ -6,6 +9,10 @@
  * @param ini_ptr 
  */
 void printfIni(ini* ini_ptr) {
+    // 检查ini_ptr是否为空指针
+    if (ini_ptr == NULL)
+        return;
+
     printf("section_num: %d\n\n", ini_ptr->section_num);
     for (int i = 0; i < ini_ptr->section_num; i++) {
         printf("section_name: %s, kvp_num: %d\n", ini_ptr->sections[i]->name, ini_ptr->sections[i]->kvp_num);
@@ -14,6 +21,58 @@ void printfIni(ini* ini_ptr) {
         } 
         printf("\n");
     }
+}
+
+/**
+ * @brief 解析file_path文件，并返回解析结果。解析时，section合并、键值对覆盖。
+ * 
+ * @param file_path 
+ * @return ini* 
+ */
+ini* iniParseFile(char* file_path) {
+    // 判断file_path是否为空指针
+    if (file_path == NULL) 
+        return NULL;
+
+    // 创建FILE流
+    FILE* stream = fopen(file_path, "r");
+    if (stream == NULL) 
+        return NULL;
+    
+    // 调用iniParse函数
+    ini* ini_ptr = NULL;
+    iniParseStat p_stat = iniParse(stream, &ini_ptr);
+    fclose(stream);
+    
+    // 返回ini_ptr
+    if (p_stat.stat & INI_ERR)
+        return NULL; 
+    return ini_ptr;
+}
+
+/**
+ * @brief 解析str字符串，并返回解析结果。解析时，section合并、键值对覆盖。
+ * 
+ */
+ini* iniParseStr(char* str) {
+    // 判断str是否为空指针
+    if (str == NULL) 
+        return NULL;
+
+    // 创建FILE流
+    FILE* stream = fmemopen(str, strlen(str), "r");
+    if (stream == NULL) 
+        return NULL;
+
+    // 调用iniParse函数
+    ini* ini_ptr = NULL;
+    iniParseStat p_stat = iniParse(stream, &ini_ptr);
+    fclose(stream);
+    
+    // 返回ini_ptr
+    if (p_stat.stat & INI_ERR)
+        return NULL; 
+    return ini_ptr;
 }
 
 /**

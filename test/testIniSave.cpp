@@ -29,6 +29,7 @@ TEST(testSave, saveFile_test0) {
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     fclose(target_stream);
     iniFree(target_ini);
+    remove("test.ini");
 }
 
 TEST(testSave, saveFile_test1) {
@@ -57,6 +58,7 @@ TEST(testSave, saveFile_test1) {
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     fclose(target_stream);
     iniFree(target_ini);
+    remove("test.ini");
 }
 
 TEST(testSave, saveFile_test2) {
@@ -86,6 +88,7 @@ TEST(testSave, saveFile_test2) {
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     fclose(target_stream);
     iniFree(target_ini);
+    remove("test.ini");
 }
 
 TEST(testSave, saveStr_test0) {
@@ -119,6 +122,7 @@ TEST(testSave, saveStr_test0) {
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     fclose(target_stream);
     iniFree(target_ini);
+    remove("test.ini");
 }
 
 TEST(testSave, saveStr_test1) {
@@ -148,6 +152,7 @@ TEST(testSave, saveStr_test1) {
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     fclose(target_stream);
     iniFree(target_ini);
+    remove("test.ini");
 }
 
 TEST(testSave, saveStr_test2) {
@@ -177,6 +182,7 @@ TEST(testSave, saveStr_test2) {
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     fclose(target_stream);
     iniFree(target_ini);
+    remove("test.ini");
 }
 
 TEST(testSave, saveStr_test3) {
@@ -209,6 +215,7 @@ TEST(testSave, saveStr_test3) {
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     fclose(target_stream);
     iniFree(target_ini);
+    remove("test.ini");
 }
 
 TEST(testSave, saveStr_test4) {
@@ -237,4 +244,5 @@ TEST(testSave, saveStr_test4) {
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     fclose(target_stream);
     iniFree(target_ini);
+    remove("test.ini");
 }
