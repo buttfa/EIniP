@@ -129,14 +129,14 @@ typedef struct INI{
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |iniStat iniAddSection(ini* ini_ptr , char* section_name)|在ini_ptr中添加section，直接追加到sections尾部，如果出现相同的section_name则使用iniGetSection函数时获取最后一个同section_name的section，实现类似覆盖的效果。||
-|iniStat iniAddKey(section* section_ptr ,char* key ,char* value)|在section_ptr中添加key-value pair，若已存在时之前的kvp仍会保留，新的kvp会被添加在kvps尾部。当使用iniGetValue函数时，会获取最后一个同键名的kvp的value，实现类似覆盖的效果。||
+|iniStat iniAddKey(section* section_ptr ,char* key ,char* value)|在section_ptr中添加key-value pair，新的kvp会被添加在kvps尾部。如果出现相同的kvp则使用iniGetKvp和iniGetValue函数时获取最后一个同名的kvp，实现类似覆盖的效果。||
 <!--|iniStat iniAddKey(ini* ini_ptr ,char* section_name ,char* key ,char* value)|在ini_ptr中添加section_name的section，并添加key-value pair，若已存在则修改value||-->
 <!--|initStat iniCreate(ini* ini_ptr)|创建ini_ptr指向的ini结构体，并初始化其成员||-->
 <!--|section* iniCreateSection(ini* ini_ptr ,char* section_name)|在ini_ptr中创建section_name的空section，若已存在则返回INI_ERR_SECTION_EXIST||-->
 #### 五、删除操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
-|iniStat iniDelSection(ini* ini_ptr ,section* section_ptr)|删除ini_ptr中指定section_name的section，若不存在则返回INI_ERR_SECTION_NOT_FOUND。如果出现相同section_name的section，则只删除最后一个同名的section。||、
+|iniStat iniDelSection(ini* ini_ptr , char* section_name)|删除ini_ptr中指定section_name的section，若不存在则返回INI_ERR_SECTION_NOT_FOUND。如果出现相同section_name的section，则只删除最后一个同名的section。||、
 |iniStat iniDelKey(section* section_ptr ,char* key)|删除section_ptr中指定key的key-value pair，若不存在则返回INI_ERR_KEY_NOT_FOUND。如果出现相同的键名，则只删除最后一个同键名的kvp。||
 <!--|iniStat iniDelKey(ini* ini_ptr ,char* section_name ,char* key)|删除ini_ptr中指定section_name的section中的key-value pair，若不存在则返回INI_ERR_KEY_NOT_FOUND||-->
  

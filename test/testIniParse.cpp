@@ -258,6 +258,7 @@ TEST(testParseStr, test0) {
     // 5. 检测结果
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     iniFree(target_ini);
+    free(target_str);
 }
 
 TEST(testParseStr, test1) {
@@ -283,6 +284,7 @@ TEST(testParseStr, test1) {
     // 5. 检测结果
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     iniFree(target_ini);
+    free(target_str);
 }
 
 TEST(testParseStr, test2) {
@@ -308,4 +310,5 @@ TEST(testParseStr, test2) {
     // 5. 检测结果
     checkIni(target_ini, expections, sizeof(expections)/sizeof(*expections));
     iniFree(target_ini);
+    free(target_str);
 }
