@@ -15,7 +15,7 @@ TEST(testDel, test0) {
     ini* ini_t = NULL;
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
     // 删除
-    iniDelSection(ini_t, iniGetSection(ini_t, (char*)"section1"));
+    iniDelSection(ini_t, (char*)"section1");
 
 
     // 检测结果
@@ -78,7 +78,7 @@ TEST(testDel, test3) {
     // 删除
     iniDelKey(iniGetSection(ini_t, (char*)"section1"), (char*)"key1");
     iniDelKey(iniGetSection(ini_t, (char*)"section2"), (char*)"test1");
-    iniDelSection(ini_t, iniGetSection(ini_t, (char*)"section3"));
+    iniDelSection(ini_t, (char*)"section3");
     
 
 
@@ -99,7 +99,7 @@ TEST(testDel, test4) {
     // 删除
     EXPECT_EQ(iniDelKey(iniGetSection(ini_t, (char*)"section1"), (char*)"key1"),INI_OK);
     EXPECT_EQ(iniDelKey(iniGetSection(ini_t, (char*)"section1"), (char*)"key3"), INI_ERR_KEY_NOT_FOUND);
-    EXPECT_EQ(iniDelSection(ini_t, iniGetSection(ini_t, (char*)"section_null")), INI_ERR_SECTION_NOT_FOUND);
+    EXPECT_EQ(iniDelSection(ini_t, (char*)"section_null"), INI_ERR_SECTION_NOT_FOUND);
 
     // 检测结果
     checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
@@ -108,6 +108,6 @@ TEST(testDel, test4) {
 
 TEST(testDel, test5) {
     // 尝试从不存在的ini中进行删除操作
-    EXPECT_EQ(iniDelSection(NULL, iniGetSection(NULL, (char*)"section1")), INI_ERR_INI_NOT_FOUND);
+    EXPECT_EQ(iniDelSection(NULL, (char*)"section1"), INI_ERR_INI_NOT_FOUND);
     EXPECT_EQ(iniDelKey(NULL, (char*)"key1"), INI_ERR_SECTION_NOT_FOUND);
 }

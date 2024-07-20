@@ -153,7 +153,7 @@ iniStat iniAddKey(section* section_ptr ,char* key ,char* value);
  * @param section_ptr 
  * @return iniStat 
  */
-iniStat iniDelSection(ini* ini_ptr ,section* section_ptr);
+iniStat iniDelSection(ini* ini_ptr ,char* section_name);
 
 /**
  * @brief 删除section中的key-value对

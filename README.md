@@ -12,33 +12,41 @@
 ## 重要函数解析
 |函数声明|函数作用|注意|
 |:-|:-|:-|
-|iniParseStat iniParse(FILE* stream, ini* ini_ptr)|解析stream流，并将解析结果保存至ini_ptr中。解析时，section合并、键值对覆盖。|
+|ini* iniParseFile(char* file_path)|解析file_path文件，并返回解析结果。解析时，section合并、键值对覆盖。||
+|ini* iniParseStr(char* str)|解析str字符串，并返回解析结果。解析时，section合并、键值对覆盖。||
 |iniStat iniFree(ini* ini_ptr)|释放ini_ptr指向的内存||
 <!--|iniStat iniFreeSection(ini* ini_ptr,char* section_name)|释放ini_ptr指向的ini中section_name的section的内存||-->
  
 ## 对ini的遍历方法
 #### 可以使用此处给出的方法遍历ini中的数据并进行所需操作，也可以使用einip库提供的函数。
 ```c
+#include <stdio.h>
 #include "ini.h"
 int main(){
     // 初始化ini
-    ini* ini = NULL;
-    if (iniParseFile("test.ini", &ini) != INI_OK){
+    ini *ini_ptr = iniParseFile("test.ini");
+    if (ini_ptr == NULL){
         printf("iniParseFile error\n");
-        exit(0);
+        exit(1);
     }
-    
-    
-    // 遍历ini的段
-    for(int i = 0; i < ini->section_num; i++){
-        printf("section name:%s\n",ini->sections[i]->name);
-        
-        // 遍历ini的键值对
-        for(int j = 0; j < ini->sections[i]->kvp_num; j++){
-            printf("key:%s value:%s\n",ini->sections[i]->kvps[j]->key,ini->sections[i]->kvps[j]->value);
+
+    // 遍历ini中的section
+    printf("section_num: %d\n\n",ini_ptr->section_num);
+    for(int i = 0; i < ini_ptr->section_num; i++){
+        section* section_ptr = ini_ptr->sections[i];
+        printf("section_name: %s, kvp_num: %d\n",section_ptr->name, section_ptr->kvp_num);
+
+        // 遍历section中的kvps
+        for(int j = 0; j < section_ptr->kvp_num; j++){
+            kvp* kvp_ptr = section_ptr->kvps[j];
+            printf("key: %s, value: %s\n",kvp_ptr->key, kvp_ptr->value);
         }
+
         printf("\n");
     }
+
+    // 释放ini
+    iniFree(ini_ptr);
 }
 ```
 
@@ -95,7 +103,12 @@ typedef struct INI{
 ```
 
 ## 额外函数解析
-#### 一、获取键值对操作相关函数
+#### 一、获取ini操作相关函数
+|函数声明|函数作用|注意|
+|:-|:-|:-|
+<!--|iniParseStat iniParse(FILE* stream, ini* ini_ptr)|解析stream流，并将解析结果保存至ini_ptr中。解析时，section合并、键值对覆盖。|返回的iniParseStat详细说明了警告和错误情况|-->
+
+#### 二、获取键值对操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |section* iniGetSection(ini* ini_ptr ,char* section_name)|返回ini_ptr中的指定section_name的section，若ini_ptr非法或段不存在则返回NULL。如果出现相同的section_name则返回最后一个同section_name的section||
@@ -104,7 +117,7 @@ typedef struct INI{
 <!--|char* iniGetValue(ini* ini_ptr ,char* section_name ,char* key)|返回ini_ptr中指定section_name的指定key的值，若不存在则返回NULL||-->
 
 
-#### 二、设置键值对操作相关函数
+#### 三、设置键值对操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |iniStat iniSetValue(section* section_ptr ,char* key ,char* value)|将section_ptr中指定key的值设置为value。如果出现相同的键名只修改最后一个同键名的kvp的value。若段不存在则返回INI_ERR_SECTION_NOT_FOUND，若键值对不存在则返回INI_ERR_KEY_NOT_FOUND||
@@ -112,7 +125,7 @@ typedef struct INI{
 
 
  
-#### 二、添加操作相关函数
+#### 四、添加操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |iniStat iniAddSection(ini* ini_ptr , char* section_name)|在ini_ptr中添加section，直接追加到sections尾部，如果出现相同的section_name则使用iniGetSection函数时获取最后一个同section_name的section，实现类似覆盖的效果。||
@@ -120,16 +133,14 @@ typedef struct INI{
 <!--|iniStat iniAddKey(ini* ini_ptr ,char* section_name ,char* key ,char* value)|在ini_ptr中添加section_name的section，并添加key-value pair，若已存在则修改value||-->
 <!--|initStat iniCreate(ini* ini_ptr)|创建ini_ptr指向的ini结构体，并初始化其成员||-->
 <!--|section* iniCreateSection(ini* ini_ptr ,char* section_name)|在ini_ptr中创建section_name的空section，若已存在则返回INI_ERR_SECTION_EXIST||-->
-#### 三、删除操作相关函数
+#### 五、删除操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |iniStat iniDelSection(ini* ini_ptr ,section* section_ptr)|删除ini_ptr中指定section_name的section，若不存在则返回INI_ERR_SECTION_NOT_FOUND。如果出现相同section_name的section，则只删除最后一个同名的section。||、
 |iniStat iniDelKey(section* section_ptr ,char* key)|删除section_ptr中指定key的key-value pair，若不存在则返回INI_ERR_KEY_NOT_FOUND。如果出现相同的键名，则只删除最后一个同键名的kvp。||
 <!--|iniStat iniDelKey(ini* ini_ptr ,char* section_name ,char* key)|删除ini_ptr中指定section_name的section中的key-value pair，若不存在则返回INI_ERR_KEY_NOT_FOUND||-->
-
-<!--#### 四、合并操作相关函数-->
  
-#### 四、保存操作相关函数
+#### 六、保存操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |iniStat iniSaveFile(ini* ini_ptr ,char* file_path)|将ini_ptr中的ini数据保存至file_path文件中||
