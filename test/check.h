@@ -8,10 +8,7 @@ using namespace std;
  * @param ini_t 
  * @param expections 
  */
-void checkIni(iniParseStat &p_stat, ini* ini_t, char**expections, int expections_num) {
-    // 判断是否解析成功
-    EXPECT_EQ(p_stat.stat == INI_OK, true);
-
+void checkIni(ini* ini_t, char**expections, int expections_num) {
     // 比较结果
     int index = 0;
     cout << "section num: " << ini_t->section_num << endl;

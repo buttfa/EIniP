@@ -14,6 +14,7 @@ typedef enum INISTAT{
     INI_OK = 0x00, // 0000_0000
     INI_WARN = 0x40, // 0100_0000
     INI_ERR = 0x80, // 1000_0000
+    INI_ERR_STR_NULL,
     INI_ERR_STREAM_NOT_FOUND,
     INI_ERR_INI_NOT_FOUND,
     INI_ERR_SECTION_NOT_FOUND,
@@ -133,7 +134,7 @@ iniStat iniSetValue(section* section_ptr ,char* key ,char* value);
  * @param section_ptr 
  * @return iniStat 
  */
-iniStat iniAddSection(ini* ini_ptr , section* section_ptr);
+iniStat iniAddSection(ini* ini_ptr , char* section_name);
 
 /**
  * @brief 将key-value对添加到section中

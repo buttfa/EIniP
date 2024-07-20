@@ -63,12 +63,9 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
                 continue;
 
             
-            // 否则，分配新section内存
-            section_ptr = (section*)malloc(sizeof(section));
-            memset(section_ptr, 0, sizeof(section));
-            section_ptr->name = strdup(tmp + 1);
-            // 将section添加到ini中
-            iniAddSection(*ini_ptr, section_ptr);
+            // 否则，将新section添加到ini中
+            iniAddSection(*ini_ptr, tmp+1);
+            section_ptr = iniGetSection(*ini_ptr, tmp+1);
 
             // 清空缓存区
             memset(buf, 0, sizeof(buf));
@@ -231,11 +228,19 @@ iniStat iniSetValue(section* section_ptr ,char* key ,char* value) {
  * @param section_ptr 
  * @return iniStat 
  */
-iniStat iniAddSection(ini* ini_ptr , section* section_ptr) {
+iniStat iniAddSection(ini* ini_ptr , char* section_name) {
     // 检查ini_ptr是否为空指针
     if (ini_ptr == NULL)
         return INI_ERR_INI_NOT_FOUND;
+    // 检查section_name是否为空指针
+    if (section_name == NULL)
+        return INI_ERR_STR_NULL;
     
+    // 创建section
+    section* section_ptr = (section*)malloc(sizeof(section));
+    memset(section_ptr, 0, sizeof(section));
+    section_ptr->name = strdup(section_name);
+
     // 添加section
     ini_ptr->section_num++;
     ini_ptr->sections = (section**)realloc(ini_ptr->sections, sizeof(section*) * ini_ptr->section_num);

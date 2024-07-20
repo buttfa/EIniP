@@ -19,7 +19,7 @@ TEST(testDel, test0) {
 
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, 0);
+    checkIni(ini_t, expections, 0);
     iniFree(ini_t);
 }
 
@@ -36,7 +36,7 @@ TEST(testDel, test1) {
     iniDelKey(iniGetSection(ini_t, (char*)"section1"), (char*)"key1");
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -54,7 +54,7 @@ TEST(testDel, test2) {
     iniDelKey(iniGetSection(ini_t, (char*)"section1"), (char*)"key2");
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -83,7 +83,7 @@ TEST(testDel, test3) {
 
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -102,7 +102,7 @@ TEST(testDel, test4) {
     EXPECT_EQ(iniDelSection(ini_t, iniGetSection(ini_t, (char*)"section_null")), INI_ERR_SECTION_NOT_FOUND);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 

@@ -115,7 +115,7 @@ typedef struct INI{
 #### 二、添加操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
-|iniStat iniAddSection(ini* ini_ptr , section* section_ptr)|在ini_ptr中添加section_ptr，直接追加到sections尾部，如果出现相同的section_name则使用iniGetSection函数时获取最后一个同section_name的section，实现类似覆盖的效果。||
+|iniStat iniAddSection(ini* ini_ptr , char* section_name)|在ini_ptr中添加section，直接追加到sections尾部，如果出现相同的section_name则使用iniGetSection函数时获取最后一个同section_name的section，实现类似覆盖的效果。||
 |iniStat iniAddKey(section* section_ptr ,char* key ,char* value)|在section_ptr中添加key-value pair，若已存在时之前的kvp仍会保留，新的kvp会被添加在kvps尾部。当使用iniGetValue函数时，会获取最后一个同键名的kvp的value，实现类似覆盖的效果。||
 <!--|iniStat iniAddKey(ini* ini_ptr ,char* section_name ,char* key ,char* value)|在ini_ptr中添加section_name的section，并添加key-value pair，若已存在则修改value||-->
 <!--|initStat iniCreate(ini* ini_ptr)|创建ini_ptr指向的ini结构体，并初始化其成员||-->

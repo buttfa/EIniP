@@ -13,7 +13,7 @@ TEST(testParse, test0) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
     
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -28,7 +28,7 @@ TEST(testParse, test1) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
     
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -43,7 +43,7 @@ TEST(testParse, test2) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -58,7 +58,7 @@ TEST(testParse, test3_the_same_section_name) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -73,7 +73,7 @@ TEST(testParse, test4_the_same_key_name) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -88,7 +88,7 @@ TEST(testParse, test5_the_same_key_and_section_name) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -108,7 +108,7 @@ TEST(testParse, test6) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
 
@@ -123,7 +123,7 @@ TEST(testParse, empty_str) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, 0);
+    checkIni(ini_t, expections, 0);
     iniFree(ini_t);
 }
 
@@ -138,7 +138,7 @@ TEST(testParse, empty_ini) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, 0);
+    checkIni(ini_t, expections, 0);
     iniFree(ini_t);
 }
 
@@ -153,6 +153,6 @@ TEST(testParse, note) {
     iniParseStat p_stat = iniParse(stream, (ini**)&ini_t);
 
     // 检测结果
-    checkIni(p_stat, ini_t, expections, sizeof(expections)/sizeof(*expections));
+    checkIni(ini_t, expections, sizeof(expections)/sizeof(*expections));
     iniFree(ini_t);
 }
