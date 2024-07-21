@@ -1,7 +1,6 @@
-### <center>|[简体中文](README.md)|[English](README_en.md)|</center>
+### <p style="text-align: center;">|[简体中文](README.md)|[English](README_en.md)|</p>
 
-## <center>Directory</center>
-### <center>  
+## <p style="text-align: center;">Directory</p>
 - [Project Name](#project-name)
 - [Project Introduction](#project-introduction)
 - [Usage method](#usage-method)
@@ -10,7 +9,6 @@
 - [IniStat enumeration type](#inistat-enumeration-type)
 - [Structure and enumeration type parsing](#structure-and-enumeration-type-parsing)
 - [Additional Function Analysis](#additional-function-analysis) 
-</center> 
 
 ## Project Name
 #### INI / Easy initialization file parser

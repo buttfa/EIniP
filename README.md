@@ -1,7 +1,6 @@
-### <center>|[简体中文](README.md)|[English](README_en.md)|</center>
+### <p style="text-align: center;">|[简体中文](README.md)|[English](README_en.md)|</p>
 
-## <center>目录</center>
-### <center>  
+## <p style="text-align: center;">目录</p> 
 - [项目名称](#项目名称)
 - [项目介绍](#项目介绍)
 - [使用方法](#使用方法)
@@ -10,7 +9,6 @@
 - [iniStat枚举类型](#inistat枚举类型)
 - [结构体及枚举类型解析](#结构体及枚举类型解析)
 - [额外函数解析](#额外函数解析) 
-</center> 
  
 ## 项目名称
 #### INI / Easy initialization file parser 
