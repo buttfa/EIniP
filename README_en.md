@@ -6,7 +6,7 @@
 
 ## Usage method
 #### （1） Place the lib folder in the root directory of the project, and add the ini folder to the project (due to different ways of adding libraries in different project projects, please handle it yourself here)
-#### （2） Add header file # include "ini. h" in the project
+#### （2） Add header file # include "ini. h" to the engineering file
 #### （3） Simply call the relevant functions, please refer to the following function instructions for details
 
 ## Analysis of important functions
@@ -56,19 +56,20 @@ int main(){
 |:-|:-|:-|
 |INI_OK|The ini function operation was successful|0x00 / 0000_0000|
 |INI_WARN|Ini function operation warning|0x40 / 0100_0000|
-|INI_WARN_VALUE_WITH_SPACE|There are spaces in the values of key value pairs|
-|INI_WARN_VALUE_IS_EMPTY|The value in the key value pair is empty|
 |INI_ERR|INI function operation error|0x80 / 1000_0000|
+|INI_ERR_STR_NULL|The string is NULL|
 |INI_ERR_STREAM_NOT_FOUND|Stream does not exist|
-|INI_ERR_FILE_NOT_FOUND|file does not exist|
-|INI_ERR_FILE_OPEN|file open failed|
-|INI_ERR_FILE_READ|file read failure|
-|INI_ERR_FILE_WRITE|File write failed|
-|INI_ERR_MEM_ALLOC|memory allocation failed|
-|INI_ERR_MEM_FREE|Memory release failed|
 |INI_ERR_INI_NOT_FOUND|Ini does not exist|
 |INI_ERR_SECTION_NOT_FOUND|Section does not exist|
 |INI_ERR_KEY_NOT_FOUND|Key does not exist|
+|INI_ERR_FILE_OPEN|file open failed|
+<!--|INI_WARN_VALUE_WITH_SPACE|There are spaces in the values of key value pairs|-->
+<!--|INI_WARN_VALUE_IS_EMPTY|The value in the key value pair is empty|-->
+<!--|INI_ERR_FILE_NOT_FOUND|file does not exist|-->
+<!--|INI_ERR_FILE_READ|file read failure|-->
+<!--|INI_ERR_FILE_WRITE|File write failed|-->
+<!--|INI_ERR_MEM_ALLOC|memory allocation failed|-->
+<!--|INI_ERR_MEM_FREE|Memory release failed|-->
 
 ## Structure and enumeration type parsing
 ```c
@@ -120,6 +121,7 @@ typedef struct INI{
 #### 3、 Set key value pair operation related functions
 |Function Declaration | Function Function Function | Attention|
 |:-|:-|:-|
+|IniStat initSection (ini * ini_ptr, char * section_2, char * target_2) | Set the section name of section_2 in ini_ptr to target_2. If the same section_2 appears, only modify the name of the last section with the same section_2. If the segment does not exist, return INI_SRR_SELECTION NOT NOT FOUND||
 |IniStat iniSetValue (section * section_ptr, char * key, char * value) | Set the value of the specified key in section_ptr to value. If the same key name appears, only modify the value of the last kvp with the same key name. If the segment does not exist, return INI-ERR_SELECTION NOT NOT FOUND. If the key value pair does not exist, return INI-ERR_KEY_SNOT NOT FOUND||
 <!--| IniStat iniSetValue (ini * ini_ptr, char * section_name, char * key, char * value) | Set the value of the specified key for section_name in ini_ptr to value. If the section does not exist, return INI_SRR_SECTON-NOT_SFOUND. If the key value pair does not exist, return INI_SRR_KEYNOT_SFOUND | | -->
 

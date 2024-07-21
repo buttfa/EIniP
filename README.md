@@ -6,7 +6,7 @@
  
 ## 使用方法
 #### （一）将lib文件夹放至工程根目录，将其中的ini文件夹添加到工程（由于不同项目工程其添加库的方式不同，此处自行处理）
-#### （二）在工程中添加头文件#include "ini.h"
+#### （二）在工程文件中添加头文件#include "ini.h"
 #### （三）调用相关函数即可，详情参见下述函数说明
 
 ## 重要函数解析
@@ -56,19 +56,20 @@ int main(){
 |:-|:-|:-|
 |INI_OK|ini函数操作成功|0x00 / 0000_0000|
 |INI_WARN|ini函数操作警告|0x40 / 0100_0000|
-|INI_WARN_VALUE_WITH_SPACE|键值对中的值存在空格|
-|INI_WARN_VALUE_IS_EMPTY|键值对中的值为空|
 |INI_ERR|ini函数操作错误|0x80 / 1000_0000|
+|INI_ERR_STR_NULL|str为空指针|
 |INI_ERR_STREAM_NOT_FOUND|流不存在|
-|INI_ERR_FILE_NOT_FOUND|文件不存在|
-|INI_ERR_FILE_OPEN|文件打开失败|
-|INI_ERR_FILE_READ|文件读取失败|
-|INI_ERR_FILE_WRITE|文件写入失败|
-|INI_ERR_MEM_ALLOC|内存分配失败|
-|INI_ERR_MEM_FREE|内存释放失败|
 |INI_ERR_INI_NOT_FOUND|ini不存在|
 |INI_ERR_SECTION_NOT_FOUND|section不存在|
 |INI_ERR_KEY_NOT_FOUND|key不存在|
+|INI_ERR_FILE_OPEN|文件打开失败|
+<!--|INI_WARN_VALUE_WITH_SPACE|键值对中的值存在空格|-->
+<!--|INI_WARN_VALUE_IS_EMPTY|键值对中的值为空|-->
+<!--|INI_ERR_FILE_NOT_FOUND|文件不存在|-->
+<!--|INI_ERR_FILE_READ|文件读取失败|-->
+<!--|INI_ERR_FILE_WRITE|文件写入失败|-->
+<!--|INI_ERR_MEM_ALLOC|内存分配失败|-->
+<!--|INI_ERR_MEM_FREE|内存释放失败|-->
 
 ## 结构体及枚举类型解析
 ```c
@@ -120,6 +121,7 @@ typedef struct INI{
 #### 三、设置键值对操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
+|iniStat iniSetSection(ini* ini_ptr ,char* section_name, char* target_name)|将ini_ptr中section_name的section名设置为target_name。如果出现相同的section_name则只修改最后一个同section_name的section的name。若段不存在则返回INI_ERR_SECTION_NOT_FOUND||
 |iniStat iniSetValue(section* section_ptr ,char* key ,char* value)|将section_ptr中指定key的值设置为value。如果出现相同的键名只修改最后一个同键名的kvp的value。若段不存在则返回INI_ERR_SECTION_NOT_FOUND，若键值对不存在则返回INI_ERR_KEY_NOT_FOUND||
 <!--|iniStat iniSetValue(ini* ini_ptr ,char* section_name ,char* key ,char* value)|将ini_ptr中指定section_name的指定key的值设置为value，若段不存在则返回INI_ERR_SECTION_NOT_FOUND，若键值对不存在则返回INI_ERR_KEY_NOT_FOUND||-->
 
