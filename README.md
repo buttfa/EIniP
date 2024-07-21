@@ -117,7 +117,7 @@ typedef struct INI{
 |kvp* iniGetKvp(section* section_ptr ,char* key)|返回section_ptr中指定key的kvp，若不存在则返回NULL。如果出现相同的键名则返回最后一个同键名的kvp||
 <!--|char* iniGetValue(ini* ini_ptr ,char* section_name ,char* key)|返回ini_ptr中指定section_name的指定key的值，若不存在则返回NULL||-->
 
-
+ 
 #### 三、设置键值对操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
