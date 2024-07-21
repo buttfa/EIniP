@@ -1,6 +1,6 @@
-### <p style="text-align: center;">|[简体中文](README.md)|[English](README_en.md)|</p>
+### <div align="center">|[简体中文](README.md)|[English](README_en.md)|</div>
 
-## <p style="text-align: center;">Directory</p>
+## <div align="center">Directory</div>
 - [Project Name](#project-name)
 - [Project Introduction](#project-introduction)
 - [Usage method](#usage-method)

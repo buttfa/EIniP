@@ -1,6 +1,6 @@
-### <p style="text-align: center;">|[简体中文](README.md)|[English](README_en.md)|</p>
+### <div align="center">|[简体中文](README.md)|[English](README_en.md)|</div>
 
-## <p style="text-align: center;">目录</p> 
+## <div align="center">目录</div> 
 - [项目名称](#项目名称)
 - [项目介绍](#项目介绍)
 - [使用方法](#使用方法)
