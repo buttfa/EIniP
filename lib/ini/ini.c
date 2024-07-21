@@ -257,6 +257,38 @@ kvp* iniGetKvp(section* section_ptr ,char* key) {
 }
 
 /**
+ * @brief 将ini_ptr中section_name的section名设置为target_name。如果
+ *        出现相同的section_name则只修改最后一个同section_name的section
+ *        的name。若段不存在则返回INI_ERR_SECTION_NOT_FOUND
+ * 
+ * @param ini_ptr 
+ * @param section_name 
+ * @param target_name 
+ * @return iniStat 
+ */
+iniStat iniSetSection(ini* ini_ptr ,char* section_name, char* target_name) {
+    // 检查ini_ptr是否为空指针
+    if (ini_ptr == NULL)
+        return INI_ERR_INI_NOT_FOUND;
+
+    // 检查section_name和target_name是否为空指针
+    if (section_name == NULL || target_name == NULL)
+        return INI_ERR_STR_NULL;
+    
+    // 遍历ini中的section
+    for (int i = ini_ptr->section_num-1; i >= 0; i--) {
+        if (strcmp(ini_ptr->sections[i]->name, section_name) == 0) {
+            // 更新section名称
+            free(ini_ptr->sections[i]->name);
+            ini_ptr->sections[i]->name = strdup(target_name);
+            return INI_OK;
+        }
+    }
+
+    return INI_ERR_SECTION_NOT_FOUND;
+}
+
+/**
  * @brief 设置指定key对应的value
  * 
  * @param section_ptr 

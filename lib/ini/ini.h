@@ -132,6 +132,18 @@ char* iniGetValue(section* section_ptr ,char* key);
 kvp* iniGetKvp(section* section_ptr ,char* key);
 
 /**
+ * @brief 将ini_ptr中section_name的section名设置为target_name。如果
+ *        出现相同的section_name则只修改最后一个同section_name的section
+ *        的name。若段不存在则返回INI_ERR_SECTION_NOT_FOUND
+ * 
+ * @param ini_ptr 
+ * @param section_name 
+ * @param target_name 
+ * @return iniStat 
+ */
+iniStat iniSetSection(ini* ini_ptr ,char* section_name, char* target_name);
+
+/**
  * @brief 设置指定key对应的value
  * 
  * @param section_ptr 
