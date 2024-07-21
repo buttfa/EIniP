@@ -1,3 +1,17 @@
+### <center>|[简体中文](README.md)|[English](README_en.md)|</center>
+
+## <center>Directory</center>
+### <center>  
+- [Project Name](#project-name)
+- [Project Introduction](#project-introduction)
+- [Usage method](#usage-method)
+- [Analysis of important functions](#analysis-of-important-functions)
+- [Traversal method for ini](#traversal-method-for-ini)
+- [IniStat enumeration type](#inistat-enumeration-type)
+- [Structure and enumeration type parsing](#structure-and-enumeration-type-parsing)
+- [Additional Function Analysis](#additional-function-analysis) 
+</center> 
+
 ## Project Name
 #### INI / Easy initialization file parser
 

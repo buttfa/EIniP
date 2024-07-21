@@ -1,3 +1,17 @@
+### <center>|[简体中文](README.md)|[English](README_en.md)|</center>
+
+## <center>目录</center>
+### <center>  
+- [项目名称](#项目名称)
+- [项目介绍](#项目介绍)
+- [使用方法](#使用方法)
+- [重要函数解析](#重要函数解析)
+- [对ini的遍历方法](#对ini的遍历方法)
+- [iniStat枚举类型](#inistat枚举类型)
+- [结构体及枚举类型解析](#结构体及枚举类型解析)
+- [额外函数解析](#额外函数解析) 
+</center> 
+
 ## 项目名称
 #### INI / Easy initialization file parser 
 
@@ -18,7 +32,7 @@
 <!--|iniStat iniFreeSection(ini* ini_ptr,char* section_name)|释放ini_ptr指向的ini中section_name的section的内存||-->
  
 ## 对ini的遍历方法
-#### 可以使用此处给出的方法遍历ini中的数据并进行所需操作，也可以使用einip库提供的函数。
+#### 可以使用此处给出的方法遍历ini中的数据并进行所需操作，也可以使用einip库提供的函数（详情请参考[额外函数解析](#额外函数解析)）。
 ```c
 #include <stdio.h>
 #include "ini.h"
@@ -50,7 +64,7 @@ int main(){
 }
 ```
 
-## iniStat 枚举类型
+## iniStat枚举类型
 #### 作用：用于指示大部分einip函数的返回值，用于指示einip函数执行状态
 |成员名称|含义|值|
 |:-|:-|:-|
