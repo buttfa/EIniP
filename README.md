@@ -9,7 +9,7 @@
 - [iniStat枚举类型](#inistat枚举类型)
 - [结构体及枚举类型解析](#结构体及枚举类型解析)
 - [额外函数解析](#额外函数解析) 
-  
+   
 ## 项目名称
 #### INI / Easy initialization file parser 
 
