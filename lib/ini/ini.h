@@ -206,22 +206,6 @@ iniStat iniSaveFile(ini* ini_ptr ,char* file_path);
 char* iniSaveStr(ini* ini_ptr);
 
 /**
- * @brief 提取input_str中的子字符串，以空格为分隔符
- * 
- * @param input_str 
- * @param out_num_tokens 
- * @return char** 
- */
-char** splitStringBySpace(char* input_str, int* out_num_tokens);
-
-/**
- * @brief 释放分割字符串的数组。
- * 
- * @param splitResult 
- */
-void freeSplitResult(char **splitResult);
-
-/**
  * @brief 去除字符串前后的空格
  * 
  * @param str 
