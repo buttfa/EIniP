@@ -11,7 +11,7 @@
 - [Additional Function Analysis](#additional-function-analysis) 
 
 ## Project Name
-#### INI / Easy initialization file parser
+#### EINIP / Easy initialization file parser
 
 ## Project Introduction
 #### Lightweight, no dependencies (referring to dependencies outside of standard libraries) Initialization file (INI file) parser, suitable for C/C++.

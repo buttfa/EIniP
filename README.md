@@ -11,7 +11,7 @@
 - [额外函数解析](#额外函数解析) 
     
 ## 项目名称
-#### INI / Easy initialization file parser 
+#### EINIP / Easy initialization file parser 
 
 ## 项目介绍
 #### 轻量级、无依赖（指无标准库以外的依赖）Initialization file（INI文件）解析器，适用于C/C++。
