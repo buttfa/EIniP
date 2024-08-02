@@ -88,12 +88,12 @@ void addIniWarning(iniParseStat* p_stat, int line, iniStat stat) {
 
     // 添加发生警告的行数
     p_stat->warn_num++;
-    p_stat->warn_line = (int*)realloc(p_stat->warn_line, sizeof(int) * p_stat->warn_num);
-    p_stat->warn_line[p_stat->warn_num - 1] = line;
+    p_stat->warn_lines = (int*)realloc(p_stat->warn_lines, sizeof(int) * p_stat->warn_num);
+    p_stat->warn_lines[p_stat->warn_num - 1] = line;
 
     // 添加警告信息
-    p_stat->warn_info = (iniStat*)realloc(p_stat->warn_info, sizeof(iniStat) * p_stat->warn_num);
-    p_stat->warn_info[p_stat->warn_num - 1] = stat;
+    p_stat->warn_infos = (iniStat*)realloc(p_stat->warn_infos, sizeof(iniStat) * p_stat->warn_num);
+    p_stat->warn_infos[p_stat->warn_num - 1] = stat;
 }
 
 /**
@@ -109,12 +109,12 @@ void addIniError(iniParseStat* p_stat, int line, iniStat stat) {
 
     // 添加发生错误的行数
     p_stat->error_num++;
-    p_stat->error_line = (int*)realloc(p_stat->error_line, sizeof(int) * p_stat->error_num);
-    p_stat->error_line[p_stat->error_num - 1] = line;
+    p_stat->error_lines = (int*)realloc(p_stat->error_lines, sizeof(int) * p_stat->error_num);
+    p_stat->error_lines[p_stat->error_num - 1] = line;
 
     // 添加错误信息
-    p_stat->error_info = (iniStat*)realloc(p_stat->error_info, sizeof(iniStat) * p_stat->error_num);
-    p_stat->error_info[p_stat->error_num - 1] = stat;
+    p_stat->error_infos = (iniStat*)realloc(p_stat->error_infos, sizeof(iniStat) * p_stat->error_num);
+    p_stat->error_infos[p_stat->error_num - 1] = stat;
 }
 
 /**
@@ -613,7 +613,7 @@ char* iniSaveStr(ini* ini_ptr) {
  * @return char* 
  */
 char* trim(char *str) {
-    if (str == NULL)
+    if (str == NULL || str == (char*)0x01)
         return NULL;
 
     char *end;

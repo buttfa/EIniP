@@ -15,6 +15,7 @@ typedef enum INISTAT{
     INI_WARN = 0x40, // 0100_0000
     INI_WARN_KVP_NOT_BELONG_SECTION,
     INI_WARN_VALUE_IS_EMPTY,
+    INI_WARN_SECTION_EXIST_SPACE,
     INI_WARN_KEY_EXIST_SPACE,
     INI_WARN_VALUE_EXIST_SPACE,
     INI_ERR = 0x80, // 1000_0000
@@ -35,12 +36,12 @@ typedef struct INIPARSESTAT{
     iniStat stat;
 
     int warn_num;
-    int* warn_line;
-    iniStat* warn_info;
+    int* warn_lines;
+    iniStat* warn_infos;
 
     int error_num;
-    int* error_line;
-    iniStat* error_info;
+    int* error_lines;
+    iniStat* error_infos;
 }iniParseStat;
 
 /**
@@ -91,6 +92,15 @@ ini* iniParseFile(char* file_path);
  * 
  */
 ini* iniParseStr(char* str);
+
+/**
+ * @brief 判断line_str中是否有需要警告的内容，如果有，则将相关信息写入p_stat结构体
+ * 
+ * @param p_stat 
+ * @param line 
+ * @param line_str 
+ */
+void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, char* lineStr);
 
 /**
  * @brief 读取stream流，并解析成ini结构体

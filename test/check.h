@@ -29,3 +29,33 @@ void checkIni(ini* ini_t, char**expections, int expections_num) {
     }
     EXPECT_EQ(index, expections_num);
 }
+
+/**
+ * @brief 检查iniParseStat的正确性
+ * 
+ */
+void checkWarnAndErr(iniParseStat p_stat,\
+\
+                    int warn_num,\
+                    int* warn_lines,\
+                    iniStat* warns,\
+\
+                    int err_num,\
+                    int* err_lines,\
+                    iniStat* errs) {
+    // 判断警告和错误的数量是否正确
+    ASSERT_EQ(p_stat.warn_num, warn_num);
+    ASSERT_EQ(p_stat.error_num, err_num);
+
+    // 判断警告和错误的内容是否正确
+    // 警告
+    for (int i = 0; i < warn_num; i++) {
+        EXPECT_EQ(p_stat.warn_lines[i], warn_lines[i]);
+        EXPECT_EQ(p_stat.warn_infos[i], warns[i]);
+    }
+    // 错误
+    for (int i = 0; i < err_num; i++) {
+        EXPECT_EQ(p_stat.error_lines[i], err_lines[i]);
+        EXPECT_EQ(p_stat.error_infos[i], errs[i]);
+    }
+}

@@ -2,6 +2,7 @@ allTest:
 	make testIniParse
 	make testIniDel
 	make testIniSave
+	make testIniWarnAndErr
 
 testIniParse:
 	@echo "test iniParse function"
@@ -29,3 +30,12 @@ testIniSave:
 	./testIniSave
 # 删除testIniSave测试单元
 	rm testIniSave
+
+testIniWarnAndErr:
+	@echo "test iniWarnAndErr function"
+# 编译testIniWarnAndErr测试单元
+	g++ -o testIniWarnAndErr testIniWarnAndErr.cpp ../lib/ini/ini.c -I ../lib/ini -lgtest -lgtest_main -w
+# 执行testIniWarnAndErr测试单元
+	./testIniWarnAndErr
+# 删除testIniWarnAndErr测试单元
+	rm testIniWarnAndErr
