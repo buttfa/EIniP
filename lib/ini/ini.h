@@ -13,6 +13,7 @@
 typedef enum INISTAT{
     INI_OK = 0x00, // 0000_0000
     INI_WARN = 0x40, // 0100_0000
+    INI_WARN_VALUE_IS_EMPTY,
     INI_ERR = 0x80, // 1000_0000
     INI_ERR_STR_NULL,
     INI_ERR_STREAM_NOT_FOUND,
@@ -31,11 +32,11 @@ typedef struct INIPARSESTAT{
 
     int warn_num;
     int* warn_line;
-    char** warn_line_str;
+    iniStat* warn_info;
 
     int error_num;
     int* error_line;
-    char** error_line_str;
+    iniStat* error_info;
 }iniParseStat;
 
 /**

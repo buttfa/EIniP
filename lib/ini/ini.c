@@ -76,6 +76,17 @@ ini* iniParseStr(char* str) {
 }
 
 /**
+ * @brief 判断line_str中是否有需要警告的内容，如果有，则将相关信息写入p_stat结构体
+ * 
+ * @param p_stat 
+ * @param line 
+ * @param line_str 
+ */
+void handleIniWarning(iniParseStat* p_stat, int line, char* line_str) {
+
+}
+
+/**
  * @brief 读取stream流，并解析成ini结构体
  * 
  * @param stream 
@@ -107,8 +118,8 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
         // 去除行首和行尾的空格及行尾的回车符
         char* tmp = trim(buf);
         row++;
-        // 跳过注释行
-        if (tmp[0] == '#' || tmp[0] == ';') {
+        // 跳过注释行和空行
+        if (tmp[0] == '#' || tmp[0] == ';' || strlen(tmp)==0) {
             continue;
         }
 
