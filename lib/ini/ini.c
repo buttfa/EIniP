@@ -76,14 +76,82 @@ ini* iniParseStr(char* str) {
 }
 
 /**
+ * @brief 向p_stat中添加警告信息
+ * 
+ * @param p_stat 
+ * @param line 
+ * @param stat 
+ */
+void addIniWarning(iniParseStat* p_stat, int line, iniStat stat) {
+    // 写入stat
+    p_stat->stat = (iniStat)((int)p_stat->stat | (int)INI_WARN);
+
+    // 添加发生警告的行数
+    p_stat->warn_num++;
+    p_stat->warn_line = (int*)realloc(p_stat->warn_line, sizeof(int) * p_stat->warn_num);
+    p_stat->warn_line[p_stat->warn_num - 1] = line;
+
+    // 添加警告信息
+    p_stat->warn_info = (iniStat*)realloc(p_stat->warn_info, sizeof(iniStat) * p_stat->warn_num);
+    p_stat->warn_info[p_stat->warn_num - 1] = stat;
+}
+
+/**
+ * @brief 向p_stat中添加错误信息
+ * 
+ * @param p_stat 
+ * @param line 
+ * @param stat 
+ */
+void addIniError(iniParseStat* p_stat, int line, iniStat stat) {
+    // 写入stat
+    p_stat->stat = (iniStat)((int)p_stat->stat | (int)INI_ERR);
+
+    // 添加发生错误的行数
+    p_stat->error_num++;
+    p_stat->error_line = (int*)realloc(p_stat->error_line, sizeof(int) * p_stat->error_num);
+    p_stat->error_line[p_stat->error_num - 1] = line;
+
+    // 添加错误信息
+    p_stat->error_info = (iniStat*)realloc(p_stat->error_info, sizeof(iniStat) * p_stat->error_num);
+    p_stat->error_info[p_stat->error_num - 1] = stat;
+}
+
+/**
  * @brief 判断line_str中是否有需要警告的内容，如果有，则将相关信息写入p_stat结构体
  * 
  * @param p_stat 
  * @param line 
  * @param line_str 
  */
-void handleIniWarning(iniParseStat* p_stat, int line, char* line_str) {
+void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, char* lineStr) {
+    // 拷贝数据
+    char* line_str = strdup(lineStr);
 
+    // 如果line_str没有等号，则产生INI_ERR_UNKNOWN_LINE错误
+    if (strchr(line_str, '=') == NULL)
+        addIniError(p_stat, line, INI_ERR_UNKNOWN_LINE);
+    
+    // 如果line_str有等号，但等号右边没有值，则产生INI_WARN_VALUE_IS_EMPTY警告
+    if (strchr(line_str, '=') != NULL && strlen(trim(strchr(line_str, '=')+1))==0) 
+        addIniWarning(p_stat, line, INI_WARN_VALUE_IS_EMPTY);
+
+    // 获取键和值
+    char* key = trim(strtok(line_str, "="));
+    char* value = trim(strchr(line_str, '=')+1);
+    // 如果line_str的键值对的键中存在空格，则产生INI_WARN_KEY_EXIST_SPACE警告
+    if (key != NULL && strchr(key, ' ') != NULL) 
+        addIniWarning(p_stat, line, INI_WARN_KEY_EXIST_SPACE);
+
+    // 如果line_str的键值对的值中存在空格，则产生INI_WARN_VALUE_EXIST_SPACE警告
+    if (value != NULL && strchr(value, ' ') != NULL) 
+        addIniWarning(p_stat, line, INI_WARN_VALUE_EXIST_SPACE);
+
+    // 当section_ptr为空指针，则产生INI_WARN_KVP_NOT_BELONG_SECTION警告
+    if (key != NULL && value != NULL && section_ptr == NULL)
+        addIniWarning(p_stat, line, INI_WARN_KVP_NOT_BELONG_SECTION);
+
+    free(line_str);
 }
 
 /**
