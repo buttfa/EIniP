@@ -24,8 +24,8 @@
 ## Analysis of important functions
 |Function Declaration | Function Function Function | Attention|
 |:-|:-|:-|
-|Ini * iniParseFile (char * file_math) | Parse the file_math file and return the parsing result. During parsing, sections are merged and key value pairs are overwritten.||
-|Ini * iniParseStr (char * str) |Parse the str string and return the parsing result. During parsing, sections are merged and key value pairs are overwritten.||
+|Ini * iniParseFile (char * file_math) | Parse the file_math file and return the parsing result. When parsing, merge sections and overwrite key value pairs.||
+|Ini * iniParseStr (char * str) |Parse the str string and return the parsing result. When parsing, merge sections and overwrite key value pairs.||
 |IniStat iniFree (ini * ini_ptr) | Release the memory pointed to by ini_ptr||
 <!--| IniStat iniFreeSection (ini * ini_ptr, char * section_2) | Release the memory of the section with section_2 in the ini pointed to by ini_ptr | | -->
  

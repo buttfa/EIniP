@@ -24,8 +24,8 @@
 ## 重要函数解析
 |函数声明|函数作用|注意|
 |:-|:-|:-|
-|ini* iniParseFile(char* file_path)|解析file_path文件，并返回解析结果。解析时，section真合并、键值对假覆盖。||
-|ini* iniParseStr(char* str)|解析str字符串，并返回解析结果。解析时，section真合并、键值对假覆盖。||
+|ini* iniParseFile(char* file_path)|解析file_path文件，并返回解析结果。解析时，section合并、键值对覆盖。||
+|ini* iniParseStr(char* str)|解析str字符串，并返回解析结果。解析时，section合并、键值对覆盖。||
 |iniStat iniFree(ini* ini_ptr)|释放ini_ptr指向的内存||
 <!--|iniStat iniFreeSection(ini* ini_ptr,char* section_name)|释放ini_ptr指向的ini中section_name的section的内存||-->
  
