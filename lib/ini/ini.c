@@ -204,6 +204,9 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
             // 否则，将新section添加到ini中
             iniAddSection(*ini_ptr, tmp+1);
             section_ptr = iniGetSection(*ini_ptr, tmp+1);
+            // 如果新seciont_name中存在空格，则产生INI_WARN_SECTION_EXIST_SPACE警告
+            if (strchr(tmp+1, ' ') != NULL)
+                addIniWarning(&p_stat, row, INI_WARN_SECTION_EXIST_SPACE);
 
             // 清空缓存区
             memset(buf, 0, sizeof(buf));
@@ -217,9 +220,12 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
             continue;
         
         // 判断是否是key-value，如果不满足条件，则跳过
-        *equal_pos = '\0';
-        if (strlen(trim(tmp)) == 0 || strlen(trim(equal_pos+1)) == 0)
+        handleIniWarnAndErr(&p_stat, section_ptr, row, tmp);
+        if ((int)p_stat.stat & (int)INI_ERR) 
             continue;
+        *equal_pos = '\0';
+        // if (strlen(trim(tmp)) == 0 || strlen(trim(equal_pos+1)) == 0)
+        //     continue;
         
         // 将key-value添加到section中
         if (iniGetKvp(section_ptr, trim(tmp)) == NULL) {
