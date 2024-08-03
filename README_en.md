@@ -76,7 +76,7 @@ int main(){
 |INI_ERR_KEY_NOT_FOUND|Key does not exist|
 |INI_ERR_FILE_OPEN|file open failed|
 <!--|INI_WARN_VALUE_WITH_SPACE|There are spaces in the values of key value pairs|-->
-<!--|INI_WARN_VALUE_IS_EMPTY|The value in the key value pair is empty|-->
+<!--|INI_ERR_VALUE_IS_EMPTY|The value in the key value pair is empty|-->
 <!--|INI_ERR_FILE_NOT_FOUND|file does not exist|-->
 <!--|INI_ERR_FILE_READ|file read failure|-->
 <!--|INI_ERR_FILE_WRITE|File write failed|-->

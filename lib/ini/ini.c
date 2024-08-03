@@ -134,11 +134,11 @@ void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, c
     
     // 如果line_str有等号，但等号右边没有值，则产生INI_WARN_VALUE_IS_EMPTY警告
     if (strchr(line_str, '=') != NULL && strlen(trim(strchr(line_str, '=')+1))==0) 
-        addIniWarning(p_stat, line, INI_WARN_VALUE_IS_EMPTY);
+        addIniError(p_stat, line, INI_ERR_VALUE_IS_EMPTY);
 
     // 获取键和值
-    char* key = trim(strtok(line_str, "="));
     char* value = trim(strchr(line_str, '=')+1);
+    char* key = trim(strtok(line_str, "="));
     // 如果line_str的键值对的键中存在空格，则产生INI_WARN_KEY_EXIST_SPACE警告
     if (key != NULL && strchr(key, ' ') != NULL) 
         addIniWarning(p_stat, line, INI_WARN_KEY_EXIST_SPACE);

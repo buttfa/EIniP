@@ -76,7 +76,7 @@ int main(){
 |INI_ERR_KEY_NOT_FOUND|key不存在|
 |INI_ERR_FILE_OPEN|文件打开失败|
 <!--|INI_WARN_VALUE_WITH_SPACE|键值对中的值存在空格|-->
-<!--|INI_WARN_VALUE_IS_EMPTY|键值对中的值为空|-->
+<!--|INI_ERR_VALUE_IS_EMPTY|键值对中的值为空|-->
 <!--|INI_ERR_FILE_NOT_FOUND|文件不存在|-->
 <!--|INI_ERR_FILE_READ|文件读取失败|-->
 <!--|INI_ERR_FILE_WRITE|文件写入失败|-->
