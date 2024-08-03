@@ -82,7 +82,7 @@ int main(){
 <!--|INI_ERR_FILE_WRITE|文件写入失败|-->
 <!--|INI_ERR_MEM_ALLOC|内存分配失败|-->
 <!--|INI_ERR_MEM_FREE|内存释放失败|-->
-
+ 
 ## 结构体及枚举类型解析
 ```c
 // 绝大多数einip函数的返回值，用于指示einip函数执行状态
