@@ -24,8 +24,8 @@
 ## Analysis of important functions
 |Function Declaration | Function Function Function | Attention|
 |:-|:-|:-|
-|Ini * iniParseFile (char * file_math) | Parses the file_math file and returns the parsing result. When parsing, merge sections and overwrite key value pairs||
-|Ini * iniParseStr (char * str) | Parses the str string and returns the parsing result. When parsing, merge sections and overwrite key value pairs||
+|Ini * iniParseFile (char * file_math) | Parse the file_math file and return the parsing result. During parsing, sections are merged and key value pairs are overwritten.||
+|Ini * iniParseStr (char * str) |Parse the str string and return the parsing result. During parsing, sections are merged and key value pairs are overwritten.||
 |IniStat iniFree (ini * ini_ptr) | Release the memory pointed to by ini_ptr||
 <!--| IniStat iniFreeSection (ini * ini_ptr, char * section_2) | Release the memory of the section with section_2 in the ini pointed to by ini_ptr | | -->
  
@@ -68,7 +68,13 @@ int main(){
 |:-|:-|:-|
 |INI_OK|The ini function operation was successful|0x00 / 0000_0000|
 |INI_WARN|Ini function operation warning|0x40 / 0100_0000|
+|INI_WARN_KVP_NOT_BELONG_SECTION|When parsing, there is a kvp that does not belong to any section|
+|INI_WARN_SECTION_EXIST_SPACE|There are spaces in section_name|
+|INI_WARN_KEY_EXIST_SPACE|There are spaces in the key|
+|INI_WARN_VALUE_EXIST_SPACE|There are spaces in the value|
 |INI_ERR|INI function operation error|0x80 / 1000_0000|
+|INI_ERR_UNKNOWN_LINE|Unknown string appears|
+|INI_ERR_VALUE_IS_EMPTY|The value in kvp is empty|
 |INI_ERR_STR_NULL|The string is NULL|
 |INI_ERR_STREAM_NOT_FOUND|Stream does not exist|
 |INI_ERR_INI_NOT_FOUND|Ini does not exist|
