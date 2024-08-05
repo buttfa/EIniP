@@ -60,9 +60,9 @@ int main(){
 #### 1、 Retrieve and release operation related functions
 |Function Declaration | Function Function Function | Attention|
 |:-|:-|:-|
-|Ini * iniParseFile (char * file_math) | Parse the file_math file and return the parsing result. When parsing, merge sections and overwrite key value pairs.||
-|Ini * iniParseStr (char * str) |Parse the str string and return the parsing result. When parsing, merge sections and overwrite key value pairs.||
-|iniParseStat iniParse(FILE* stream, ini* ini_ptr)|Parse the stream and save the parsing result to ini_ptr. When parsing, merge sections and overwrite key value pairs.|The returned iniParseStat provides a detailed explanation of warning and error situations|
+|Ini * iniParseFile (char * file_math) | Parse the file_math file and return the parsing result. During parsing, sections are merged and key value pairs are overwritten.||
+|Ini * iniParseStr (char * str) |Parse the str string and return the parsing result. During parsing, sections are merged and key value pairs are overwritten.||
+|iniParseStat iniParse(FILE* stream, ini* ini_ptr)|Parse the stream and save the parsing result to ini_ptr. During parsing, sections are merged and key value pairs are overwritten.|The returned iniParseStat provides a detailed explanation of warning and error situations|
 |IniStat iniFree (ini * ini_ptr) | Release the memory pointed to by ini_ptr||
 
 #### 2、 Get operation related functions
