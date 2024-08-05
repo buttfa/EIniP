@@ -65,7 +65,9 @@ TEST(testParse, test3_the_same_section_name) {
 TEST(testParse, test4_the_same_key_name) {
     // 初始化测试用例
     char* str = (char*)"[section1]\nkey1 = value1\n    \n  \n key1= Change\n";
-    char* expections[] = {(char*)"section1",(char*)"key1",(char*)"Change"};
+    char* expections[] = {(char*)"section1",
+                        (char*)"key1",(char*)"value1",
+                        (char*)"key1",(char*)"Change"};
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
@@ -80,7 +82,10 @@ TEST(testParse, test4_the_same_key_name) {
 TEST(testParse, test5_the_same_key_and_section_name) {
     // 初始化测试用例
     char* str = (char*)"[section1]\nkey1 = value1\n key2=value2\n [section1]  \n  \n key2= Change\n";
-    char* expections[] = {(char*)"section1",(char*)"key1",(char*)"value1",(char*)"key2",(char*)"Change"};
+    char* expections[] = {(char*)"section1",
+                        (char*)"key1",(char*)"value1",
+                        (char*)"key2",(char*)"value2",
+                        (char*)"key2",(char*)"Change"};
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
@@ -97,6 +102,7 @@ TEST(testParse, test6) {
     char* str = (char*)"[section1]\nkey1 = value1\n key2=value2\n[another_section]\n pp_ke=qq_va \n[section1]  \n  \n key2= Change\n";
     char* expections[] = {(char*)"section1",
                         (char*)"key1",(char*)"value1",
+                        (char*)"key2",(char*)"value2",
                         (char*)"key2",(char*)"Change",
                         
                         (char*)"another_section",

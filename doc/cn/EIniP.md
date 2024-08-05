@@ -108,6 +108,7 @@ int main(){
 |INI_WARN_VALUE_EXIST_SPACE|value中存在空格|
 |INI_ERR|ini函数操作错误|0x80 / 1000_0000|
 |INI_ERR_UNKNOWN_LINE|出现未知字符串|
+|INI_ERR_KEY_IS_EMPTY|kvp中的key为空|
 |INI_ERR_VALUE_IS_EMPTY|kvp中的value为空|
 |INI_ERR_STR_NULL|str为空指针|
 |INI_ERR_STREAM_NOT_FOUND|流不存在|

@@ -108,6 +108,7 @@ int main(){
 |INI_WARN_VALUE_EXIST_SPACE|There are spaces in the value|
 |INI_ERR|INI function operation error|0x80 / 1000_0000|
 |INI_ERR_UNKNOWN_LINE|Unknown string appears|
+|INI_ERR_KEY_IS_EMPTY|The key in kvp is empty|
 |INI_ERR_VALUE_IS_EMPTY|The value in kvp is empty|
 |INI_ERR_STR_NULL|The string is NULL|
 |INI_ERR_STREAM_NOT_FOUND|Stream does not exist|

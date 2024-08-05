@@ -125,6 +125,10 @@ void addIniError(iniParseStat* p_stat, int line, iniStat stat) {
  * @param line_str 
  */
 void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, char* lineStr) {
+    // 检测lineStr是否为空字符
+    if (lineStr == NULL || strlen(lineStr) == 0)
+        return;
+    
     // 拷贝数据
     char* line_str = strdup(lineStr);
 
@@ -132,11 +136,17 @@ void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, c
     if (strchr(line_str, '=') == NULL)
         addIniError(p_stat, line, INI_ERR_UNKNOWN_LINE);
     
-    // 如果line_str有等号，但等号右边没有值，则产生INI_WARN_VALUE_IS_EMPTY警告
+    // 如果line_str有等号，但等号右边没有值，则产生INI_ERR_VALUE_IS_EMPTY警告
     if (strchr(line_str, '=') != NULL && strlen(trim(strchr(line_str, '=')+1))==0) 
         addIniError(p_stat, line, INI_ERR_VALUE_IS_EMPTY);
 
+    // 如果line_str有等号，但等号左边没有键，则产生INI_ERR_KEY_IS_EMPTY错误
+    if (strchr(line_str, '=') != NULL && strlen(trim(strtok(line_str, "=")))==0) 
+        addIniError(p_stat, line, INI_ERR_KEY_IS_EMPTY);
+
     // 获取键和值
+    free(line_str);
+    line_str = strdup(lineStr);
     char* value = trim(strchr(line_str, '=')+1);
     char* key = trim(strtok(line_str, "="));
     // 如果line_str的键值对的键中存在空格，则产生INI_WARN_KEY_EXIST_SPACE警告
@@ -214,27 +224,28 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
         }
 
         int index = 0, key_index = 0, value_index = 0;
-        // 找到=字符
-        char* equal_pos = strchr(tmp, '=');
-        if (equal_pos == NULL)
-            continue;
-        
         // 判断是否是key-value，如果不满足条件，则跳过
         handleIniWarnAndErr(&p_stat, section_ptr, row, tmp);
         if ((int)p_stat.stat & (int)INI_ERR) 
             continue;
+
+        // 找到=字符
+        char* equal_pos = strchr(tmp, '=');
+        if (equal_pos == NULL)
+            continue;
         *equal_pos = '\0';
-        // if (strlen(trim(tmp)) == 0 || strlen(trim(equal_pos+1)) == 0)
-        //     continue;
+        if (strlen(trim(tmp)) == 0 || strlen(trim(equal_pos+1)) == 0)
+            continue;
         
         // 将key-value添加到section中
-        if (iniGetKvp(section_ptr, trim(tmp)) == NULL) {
-            // 添加key-value对
-            iniAddKey(section_ptr, trim(tmp), trim(equal_pos+1));
-        } else {
-            // 更新key-value对
-            iniSetValue(section_ptr, trim(tmp), trim(equal_pos+1));
-        }
+        iniAddKey(section_ptr, trim(tmp), trim(equal_pos+1));
+        // if (iniGetKvp(section_ptr, trim(tmp)) == NULL) {
+        //     // 添加key-value对
+        //     iniAddKey(section_ptr, trim(tmp), trim(equal_pos+1));
+        // } else {
+        //     // 更新key-value对
+        //     iniSetValue(section_ptr, trim(tmp), trim(equal_pos+1));
+        // }
 
         // 清空缓存区
         memset(buf, 0, sizeof(buf));
@@ -435,6 +446,10 @@ iniStat iniAddKey(section* section_ptr ,char* key ,char* value) {
     // 检查section_ptr是否为空指针
     if (section_ptr == NULL) 
         return INI_ERR_SECTION_NOT_FOUND;
+
+    // 检查key和value是否为空指针
+    if (key == NULL || value == NULL)
+        return INI_ERR_STR_NULL;
     
     // 添加key-value对
     section_ptr->kvp_num++;
