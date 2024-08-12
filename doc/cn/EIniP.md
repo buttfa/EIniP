@@ -20,6 +20,8 @@ int main(){
     // 获取section中的指定key
     char* value = iniGetValue(section_ptr,"key1");
 
+    // 释放ini
+    iniFree(ini_ptr);
     return 0;
 }
 ```
@@ -53,6 +55,7 @@ int main(){
 
     // 释放ini
     iniFree(ini_ptr);
+    return 0;
 }
 ```
 
@@ -69,8 +72,8 @@ int main(){
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |section* iniGetSection(ini* ini_ptr ,char* section_name)|返回ini_ptr中的指定section_name的section，若ini_ptr非法或段不存在则返回NULL。如果出现相同的section_name则返回最后一个同section_name的section||
-|char* iniGetValue(section* section_ptr ,char* key)|返回section_ptr中指定key的值，若不存在则返回NULL。如果出现相同的键名则返回最后一个同键名的value||
-|kvp* iniGetKvp(section* section_ptr ,char* key)|返回section_ptr中指定key的kvp，若不存在则返回NULL。如果出现相同的键名则返回最后一个同键名的kvp||
+|char* iniGetValue(section* section_ptr ,char* key)|返回section_ptr中指定key的值的地址，若不存在则返回NULL。如果出现相同的键名则返回最后一个同键名的value||
+|kvp* iniGetKvp(section* section_ptr ,char* key)|返回section_ptr中指定key的kvp的地址，若不存在则返回NULL。如果出现相同的键名则返回最后一个同键名的kvp||
 
 #### 三、设置操作相关函数
 |函数声明|函数作用|注意|

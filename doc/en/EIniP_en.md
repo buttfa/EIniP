@@ -20,6 +20,8 @@ int main(){
     // Retrieve the specified key from the section
     char* value = iniGetValue(section_ptr,"key1");
 
+    // Free ini
+    iniFree(ini_ptr);
     return 0;
 }
 ```
@@ -53,6 +55,7 @@ int main(){
 
     // Free ini
     iniFree(ini_ptr);
+    return 0;
 }
 ```
 
@@ -69,8 +72,8 @@ int main(){
 |Function Declaration | Function Function Function | Attention|
 |:-|:-|:-|
 |Section * iniGetSection (ini * ini_ptr, char * section_2) | Returns the section with the specified section_2 in ini_ptr. If ini_ptr is illegal or the section does not exist, returns NULL. If the same section_2 appears, return the last section with the same section_2||
-|Char * iniGetValue (section * section_ptr, char * key) | Returns the value of the specified key in section_ptr. If it does not exist, returns NULL. If the same key name appears, return the last value with the same key name||
-|Kvp * iniGetKvp (section * section_ptr, char * key) | Returns the kvp of the specified key in section_ptr. If it does not exist, returns NULL. If the same key name appears, return the last kvp with the same key name||
+|Char * iniGetValue (section * section_ptr, char * key) | Return the address of the value of the specified key in section_ptr. If it does not exist, return NULL. If the same key name appears, return the last value with the same key name||
+|Kvp * iniGetKvp (section * section_ptr, char * key) | Return the address of the kvp with the specified key in section_ptr. If it does not exist, return NULL. If the same key name appears, return the last kvp with the same key name||
 
 #### 3、 Set operation related functions
 |Function Declaration | Function Function Function | Attention|
