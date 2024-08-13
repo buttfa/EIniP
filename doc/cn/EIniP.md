@@ -85,13 +85,13 @@ int main(){
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |iniStat iniAddSection(ini* ini_ptr , char* section_name)|在ini_ptr中添加section，直接追加到sections尾部，如果出现相同的section_name则使用iniGetSection函数时获取最后一个同section_name的section，实现类似覆盖的效果。||
-|iniStat iniAddKey(section* section_ptr ,char* key ,char* value)|在section_ptr中添加key-value pair，新的kvp会被添加在kvps尾部。如果出现相同的kvp则使用iniGetKvp和iniGetValue函数时获取最后一个同名的kvp，实现类似覆盖的效果。||
+|iniStat iniAddKvp(section* section_ptr ,char* key ,char* value)|在section_ptr中添加key-value pair，新的kvp会被添加在kvps尾部。如果出现相同的kvp则使用iniGetKvp和iniGetValue函数时获取最后一个同名的kvp，实现类似覆盖的效果。||
 
 #### 五、删除操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
 |iniStat iniDelSection(ini* ini_ptr , char* section_name)|删除ini_ptr中指定section_name的section，若不存在则返回INI_ERR_SECTION_NOT_FOUND。如果出现相同section_name的section，则只删除最后一个同名的section。||、
-|iniStat iniDelKey(section* section_ptr ,char* key)|删除section_ptr中指定key的key-value pair，若不存在则返回INI_ERR_KEY_NOT_FOUND。如果出现相同的键名，则只删除最后一个同键名的kvp。||
+|iniStat iniDelKvp(section* section_ptr ,char* key)|删除section_ptr中指定key的key-value pair，若不存在则返回INI_ERR_KEY_NOT_FOUND。如果出现相同的键名，则只删除最后一个同键名的kvp。||
 
 #### 六、保存操作相关函数
 |函数声明|函数作用|注意|

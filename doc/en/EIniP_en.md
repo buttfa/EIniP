@@ -85,13 +85,13 @@ int main(){
 |Function Declaration | Function Function Function | Attention|
 |:-|:-|:-|
 |IniStat iniAddSection (ini * ini_ptr, char * section_2) | Add a section to ini_ptr and append it directly to the end of the section. If the same section_2 appears, use the iniGets section function to obtain the last section with the same section_2, achieving a similar overlay effect||
-|IniStat iniAddKey (section * section_ptr, char * key, char * value) | Add a key value pair in section_ptr, and the new kvp will be added at the end of kvps. If the same kvp appears, use the iniGetKvp and iniGetValue functions to obtain the last kvp with the same name, achieving a similar coverage effect||
+|IniStat iniAddKvp (section * section_ptr, char * key, char * value) | Add a key value pair in section_ptr, and the new kvp will be added at the end of kvps. If the same kvp appears, use the iniGetKvp and iniGetValue functions to obtain the last kvp with the same name, achieving a similar coverage effect||
 
 #### 5、 Delete operation related functions
 |Function Declaration | Function Function Function | Attention|
 |:-|:-|:-|
 |IniStat iniDelSection (ini * ini_ptr, char * section_2) | Delete the section with the specified section_2 in ini_ptr. If it does not exist, return INI-ERR_SELECTION. NOT_SFOUND. If there are sections with the same section_2, only the last section with the same name will be deleted
-|IniStat iniDelKey (section * section_ptr, char * key) | Delete the key value pair for the specified key in section_ptr. If it does not exist, return INI-ERR_KEYSinoT_FOUND. If the same key name appears, only the last kvp with the same key name will be deleted||
+|IniStat iniDelKvp (section * section_ptr, char * key) | Delete the key value pair for the specified key in section_ptr. If it does not exist, return INI-ERR_KEYSinoT_FOUND. If the same key name appears, only the last kvp with the same key name will be deleted||
 
 #### 6、 Save operation related functions
 |Function Declaration | Function Function Function | Attention|

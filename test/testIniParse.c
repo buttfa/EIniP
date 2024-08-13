@@ -199,7 +199,7 @@ TEST(testParseFile, test1) {
     FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
     ini* test_ini = NULL; 
     iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
-    iniDelKey(iniGetSection(test_ini, "section1"), "key1");
+    iniDelKvp(iniGetSection(test_ini, "section1"), "key1");
     
     // 3. 保存和释放测试用ini
     iniSaveFile(test_ini, "test.ini");
@@ -224,7 +224,7 @@ TEST(testParseFile, test2) {
     FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
     ini* test_ini = NULL; 
     iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
-    iniDelKey(iniGetSection(test_ini, "section1"), "key1");
+    iniDelKvp(iniGetSection(test_ini, "section1"), "key1");
     iniDelSection(test_ini, "section1");
     
     // 3. 保存和释放测试用ini
@@ -277,7 +277,7 @@ TEST(testParseStr, test1) {
     FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
     ini* test_ini = NULL; 
     iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
-    iniDelKey(iniGetSection(test_ini, "section1"), "key1");
+    iniDelKvp(iniGetSection(test_ini, "section1"), "key1");
     
     // 3. 保存和释放测试用ini
     char* target_str = iniSaveStr(test_ini);
@@ -302,7 +302,7 @@ TEST(testParseStr, test2) {
     FILE* test_stream = fmemopen(test_str, strlen(test_str), "r");
     ini* test_ini = NULL; 
     iniParseStat test_stat = iniParse(test_stream, (ini**)&test_ini);
-    iniDelKey(iniGetSection(test_ini, "section1"), "key1");
+    iniDelKvp(iniGetSection(test_ini, "section1"), "key1");
     iniDelSection(test_ini, "section1");
     
     // 3. 保存和释放测试用ini

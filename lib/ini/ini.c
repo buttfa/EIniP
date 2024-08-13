@@ -1,12 +1,51 @@
+/**
+ * @file ini.c
+ * @author  buttfa (1662332017@qq.com)
+ * @brief ini.c是EIniP库的实现源文件
+ * @version 0.1
+ * @date 2024-08-12
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "ini.h"
 
 /**
+ * @brief 去除字符串前后的空格
+ *        注：该函数是在原字符串上操作，会修改原字符串，且返回值是基于原字符串的索引地址
+ * 
+ * @param str 操作的字符串
+ * @return char* 返回去除空格后的字符串指针
+ */
+static char* trim(char *str) {
+    if (str == NULL || str == (char*)0x01)
+        return NULL;
+
+    char *end;
+    
+    // 去除前导空格
+    while(isspace((unsigned char)*str)) str++;
+    
+    if(*str == 0)  // 字符串为空的情况
+        return str;
+    
+    // 去除后导空格
+    end = str + strlen(str) - 1;
+    while(end > str && isspace((unsigned char)*end)) end--;
+    
+    // 将结尾的'\0'放回正确的位置
+    end[1] = '\0';
+    
+    return str;
+}
+
+/**
  * @brief 打印ini结构体
  * 
- * @param ini_ptr 
+ * @param ini_ptr 所需要打印的ini结构体
  */
 void printfIni(ini* ini_ptr) {
     // 检查ini_ptr是否为空指针
@@ -26,8 +65,8 @@ void printfIni(ini* ini_ptr) {
 /**
  * @brief 解析file_path文件，并返回解析结果。解析时，section合并、键值对覆盖。
  * 
- * @param file_path 
- * @return ini* 
+ * @param file_path 需要解析的文件路径
+ * @return ini* 解析得到的ini结构体指针，返回NULL则表示解析失败
  */
 ini* iniParseFile(char* file_path) {
     // 判断file_path是否为空指针
@@ -53,6 +92,8 @@ ini* iniParseFile(char* file_path) {
 /**
  * @brief 解析str字符串，并返回解析结果。解析时，section合并、键值对覆盖。
  * 
+ * @param str 需要解析的字符串
+ * @return ini* 解析得到的ini结构体指针，返回NULL则表示解析失败
  */
 ini* iniParseStr(char* str) {
     // 判断str是否为空指针
@@ -78,11 +119,11 @@ ini* iniParseStr(char* str) {
 /**
  * @brief 向p_stat中添加警告信息
  * 
- * @param p_stat 
- * @param line 
- * @param stat 
+ * @param p_stat 需要添加警告信息的iniParseStat结构体指针
+ * @param line 出现警告的行数
+ * @param stat 警告的状态码
  */
-void addIniWarning(iniParseStat* p_stat, int line, iniStat stat) {
+static void addIniWarning(iniParseStat* p_stat, int line, iniStat stat) {
     // 写入stat
     p_stat->stat = (iniStat)((int)p_stat->stat | (int)INI_WARN);
 
@@ -99,11 +140,11 @@ void addIniWarning(iniParseStat* p_stat, int line, iniStat stat) {
 /**
  * @brief 向p_stat中添加错误信息
  * 
- * @param p_stat 
- * @param line 
- * @param stat 
+ * @param p_stat 需要添加错误信息的iniParseStat结构体指针
+ * @param line 出现错误的行数
+ * @param stat 错误的状态码
  */
-void addIniError(iniParseStat* p_stat, int line, iniStat stat) {
+static void addIniError(iniParseStat* p_stat, int line, iniStat stat) {
     // 写入stat
     p_stat->stat = (iniStat)((int)p_stat->stat | (int)INI_ERR);
 
@@ -118,11 +159,12 @@ void addIniError(iniParseStat* p_stat, int line, iniStat stat) {
 }
 
 /**
- * @brief 判断line_str中是否有需要警告的内容，如果有，则将相关信息写入p_stat结构体
+ * @brief 判断line_str中是否有需要警告或报错的内容，如果有，则将相关信息写入p_stat结构体
  * 
- * @param p_stat 
- * @param line 
- * @param line_str 
+ * @param p_stat 需要添加警告或报错信息的iniParseStat结构体指针
+ * @param section_ptr lineStr所属的section的指针
+ * @param line lineStr出现的行数
+ * @param lineStr 需要检查的字符串
  */
 void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, char* lineStr) {
     // 检测lineStr是否为空字符
@@ -167,9 +209,9 @@ void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, c
 /**
  * @brief 读取stream流，并解析成ini结构体
  * 
- * @param stream 
- * @param ini_ptr 
- * @return iniParseStat 
+ * @param stream 需要读取的stream
+ * @param ini_ptr 需要存入的ini结构体二级指针
+ * @return iniParseStat 该结构体详细说明了警告和错误情况
  */
 iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
     // 创建iniParseStat结构体
@@ -238,10 +280,10 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
             continue;
         
         // 将key-value添加到section中
-        iniAddKey(section_ptr, trim(tmp), trim(equal_pos+1));
+        iniAddKvp(section_ptr, trim(tmp), trim(equal_pos+1));
         // if (iniGetKvp(section_ptr, trim(tmp)) == NULL) {
         //     // 添加key-value对
-        //     iniAddKey(section_ptr, trim(tmp), trim(equal_pos+1));
+        //     iniAddKvp(section_ptr, trim(tmp), trim(equal_pos+1));
         // } else {
         //     // 更新key-value对
         //     iniSetValue(section_ptr, trim(tmp), trim(equal_pos+1));
@@ -256,8 +298,9 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
 /**
  * @brief 释放ini内存
  * 
- * @param ini_ptr 
- * @return iniStat 
+ * @param ini_ptr 需要释放的ini
+ * @return iniStat 返回INI_OK表示成功释放，
+ *                 返回INI_ERR_INI_NOT_FOUND表示该ini_ptr为空指针
  */
 iniStat iniFree(ini* ini_ptr) {
     if (ini_ptr == NULL) {
@@ -288,11 +331,11 @@ iniStat iniFree(ini* ini_ptr) {
 }
 
 /**
- * @brief 获取指定section
+ * @brief 获取ini_ptr中最后一个同section_name的section
  * 
- * @param ini_ptr 
- * @param section_name 
- * @return section* 
+ * @param ini_ptr 需要操作的ini指针
+ * @param section_name 目标section的名称
+ * @return section* 如果存在则返回该section指针，否则返回NULL
  */
 section* iniGetSection(ini* ini_ptr ,char* section_name) {
     // 检查ini_ptr是否为空指针
@@ -310,11 +353,11 @@ section* iniGetSection(ini* ini_ptr ,char* section_name) {
 }
 
 /**
- * @brief 获取指定key对应的value
+ * @brief 获取section_ptr中最后一个同key的键值对的value
  * 
- * @param section_ptr 
- * @param key 
- * @return char* 
+ * @param section_ptr 需要操作的section指针
+ * @param key 目标键值对的key名
+ * @return char* 如果存在则返回该value指针，否则返回NULL
  */
 char* iniGetValue(section* section_ptr ,char* key) {
     // 检查section_ptr是否为空指针
@@ -332,11 +375,11 @@ char* iniGetValue(section* section_ptr ,char* key) {
 }
 
 /**
- * @brief 获取指定key对应的kvp
+ * @brief 获取section_ptr中最后一个同key的键值对
  * 
- * @param section_ptr 
- * @param key 
- * @return kvp* 
+ * @param section_ptr 需要操作的section指针
+ * @param key 目标键值对的key名
+ * @return kvp* 如果存在则返回该kvp指针，否则返回NULL
  */
 kvp* iniGetKvp(section* section_ptr ,char* key) {
     // 检查section_ptr是否为空指针
@@ -353,14 +396,15 @@ kvp* iniGetKvp(section* section_ptr ,char* key) {
 }
 
 /**
- * @brief 将ini_ptr中section_name的section名设置为target_name。如果
- *        出现相同的section_name则只修改最后一个同section_name的section
- *        的name。若段不存在则返回INI_ERR_SECTION_NOT_FOUND
+ * @brief 将ini_ptr中最后一个section_name的section名设置为target_name。
  * 
- * @param ini_ptr 
- * @param section_name 
- * @param target_name 
- * @return iniStat 
+ * @param ini_ptr 需要操作的ini指针
+ * @param section_name 需要修改的section的名称
+ * @param target_name 修改后的section名称
+ * @return iniStat 返回INI_OK表示成功修改，
+ *                 返回INI_ERR_INI_NOT_FOUND表示该ini_ptr为空指针，
+ *                 返回INI_ERR_STR_NULL表示section_name或target_name为空指针
+ *                 返回INI_ERR_SECTION_NOT_FOUND表示该section_name对应的section不存在
  */
 iniStat iniSetSection(ini* ini_ptr ,char* section_name, char* target_name) {
     // 检查ini_ptr是否为空指针
@@ -385,17 +429,24 @@ iniStat iniSetSection(ini* ini_ptr ,char* section_name, char* target_name) {
 }
 
 /**
- * @brief 设置指定key对应的value
+ * @brief 将section_ptr中最后一个同key名的键值对的值设置为value。
  * 
- * @param section_ptr 
- * @param key 
- * @param value 
- * @return iniStat 
+ * @param section_ptr 需要操作的section指针
+ * @param key 目标key名
+ * @param value 写入的value
+ * @return iniStat 返回INI_OK表示成功修改，
+ *                 返回INI_ERR_SECTION_NOT_FOUND表示该section_ptr为空指针，
+ *                 返回INI_ERR_STR_NULL表示key或value为空指针
+ *                 返回INI_ERR_KEY_NOT_FOUND表示该key对应的键值对不存在
  */
 iniStat iniSetValue(section* section_ptr ,char* key ,char* value) {
     // 检查section_ptr是否为空指针
     if (section_ptr == NULL)
         return INI_ERR_SECTION_NOT_FOUND;
+    
+    // 检查key和value是否为空指针
+    if (key == NULL || value == NULL)
+        return INI_ERR_STR_NULL;
 
     // 遍历section中的key-value对
     for (int i = section_ptr->kvp_num-1; i >= 0; i--) {
@@ -406,14 +457,19 @@ iniStat iniSetValue(section* section_ptr ,char* key ,char* value) {
             return INI_OK;
         }
     }
+
+    return INI_ERR_KEY_NOT_FOUND;
 }
 
 /**
- * @brief 将section添加到ini中
+ * @brief 创建名为section_name的section，并添加
+ *        到ini的sections末尾
  * 
- * @param ini_ptr 
- * @param section_ptr 
- * @return iniStat 
+ * @param ini_ptr 需要操作的ini指针
+ * @param section_name 需要创建的section名称
+ * @return iniStat 返回INI_OK表示成功添加，
+ *                 返回INI_ERR_INI_NOT_FOUND表示该ini_ptr为空指针，
+ *                 返回INI_ERR_STR_NULL表示section_name为空指针
  */
 iniStat iniAddSection(ini* ini_ptr , char* section_name) {
     // 检查ini_ptr是否为空指针
@@ -432,17 +488,20 @@ iniStat iniAddSection(ini* ini_ptr , char* section_name) {
     ini_ptr->section_num++;
     ini_ptr->sections = (section**)realloc(ini_ptr->sections, sizeof(section*) * ini_ptr->section_num);
     ini_ptr->sections[ini_ptr->section_num - 1] = section_ptr;
+    return INI_OK;
 }
 
 /**
- * @brief 将key-value对添加到section中
+ * @brief 创建key-value对，并添加到section的kvps末尾
  * 
- * @param section_ptr 
- * @param key 
- * @param value 
- * @return iniStat 
+ * @param section_ptr 需要操作的section指针
+ * @param key 构成key-value对的key
+ * @param value 构成key-value对的value
+ * @return iniStat 返回INI_OK表示成功添加，
+ *                 返回INI_ERR_SECTION_NOT_FOUND表示该section_ptr为空指针，
+ *                 返回INI_ERR_STR_NULL表示key或value为空指针
  */
-iniStat iniAddKey(section* section_ptr ,char* key ,char* value) {
+iniStat iniAddKvp(section* section_ptr ,char* key ,char* value) {
     // 检查section_ptr是否为空指针
     if (section_ptr == NULL) 
         return INI_ERR_SECTION_NOT_FOUND;
@@ -457,14 +516,17 @@ iniStat iniAddKey(section* section_ptr ,char* key ,char* value) {
     section_ptr->kvps[section_ptr->kvp_num - 1] = (kvp*)malloc(sizeof(kvp));
     section_ptr->kvps[section_ptr->kvp_num - 1]->key = strdup(key);
     section_ptr->kvps[section_ptr->kvp_num - 1]->value = strdup(value);
+    return INI_OK;
 }
 
 /**
- * @brief 删除ini中的section
+ * @brief 删除ini_ptr中最后一个同section_name的section
  * 
- * @param ini_ptr 指向INI结构体的指针
- * @param section_ptr 指向SECTION结构体的指针，即要删除的section
- * @return iniStat 返回操作的状态
+ * @param ini_ptr 需要操作的ini指针
+ * @param section_name 需要删除的section名称
+ * @return iniStat 返回INI_OK表示成功删除，
+ *                 返回INI_ERR_INI_NOT_FOUND表示该ini_ptr为空指针，
+ *                 返回INI_ERR_SECTION_NOT_FOUND表示该section_name对应的section不存在，或者该section_name为空指针
  */
 iniStat iniDelSection(ini* ini_ptr, char* section_name) {
     // 检查ini_ptr是否为空指针
@@ -506,13 +568,15 @@ iniStat iniDelSection(ini* ini_ptr, char* section_name) {
 }
 
 /**
- * @brief 删除section中的key-value对
+ * @brief 删除section_ptr中最后一个同key名的键值对
  * 
- * @param section_ptr 指向SECTION结构体的指针
- * @param key 要删除的key值
- * @return iniStat 返回操作的状态
+ * @param section_ptr 需要操作的section指针
+ * @param key 需要删除的键值对的key名
+ * @return iniStat 返回INI_OK表示成功删除，
+ *                 返回INI_ERR_SECTION_NOT_FOUND表示该section_ptr为空指针，
+ *                 返回INI_ERR_KEY_NOT_FOUND表示该key对应的键值对不存在，或者该key为空指针
  */
-iniStat iniDelKey(section* section_ptr, char* key) {
+iniStat iniDelKvp(section* section_ptr, char* key) {
     // 检查section_ptr是否为空指针
     if (section_ptr == NULL)
         return INI_ERR_SECTION_NOT_FOUND;
@@ -549,9 +613,10 @@ iniStat iniDelKey(section* section_ptr, char* key) {
 /**
  * @brief 将ini_ptr中的ini数据保存至file_path文件中
  * 
- * @param ini_ptr 
- * @param file_path 
- * @return iniStat 
+ * @param ini_ptr 需要保存的ini指针
+ * @param file_path 保存的文件路径
+ * @return iniStat 返回INI_OK表示成功保存，
+ *                 返回INI_ERR_FILE_OPEN表示该file_path为空指针或者无法打开该文件，
  */
 iniStat iniSaveFile(ini* ini_ptr, char* file_path) {
     // 检查ini_ptr是否为空指针
@@ -585,8 +650,10 @@ iniStat iniSaveFile(ini* ini_ptr, char* file_path) {
 }
 
 /**
- * @brief 以字符串形式返回ini_ptr中的ini数据
+ * @brief 将ini_ptr中的ini数据保存至字符串中并返回
  * 
+ * @param ini_ptr 需要保存的ini指针
+ * @return char* 保存成功返回的字符串指针，否则返回NULL
  */
 char* iniSaveStr(ini* ini_ptr) {
     // 检查ini_ptr是否为空
@@ -624,33 +691,5 @@ char* iniSaveStr(ini* ini_ptr) {
         strcat(str, "\n");
     }
 
-    return str;
-}
-
-/**
- * @brief 去除字符串前后的空格
- * 
- * @param str 
- * @return char* 
- */
-char* trim(char *str) {
-    if (str == NULL || str == (char*)0x01)
-        return NULL;
-
-    char *end;
-    
-    // 去除前导空格
-    while(isspace((unsigned char)*str)) str++;
-    
-    if(*str == 0)  // 字符串为空的情况
-        return str;
-    
-    // 去除后导空格
-    end = str + strlen(str) - 1;
-    while(end > str && isspace((unsigned char)*end)) end--;
-    
-    // 将结尾的'\0'放回正确的位置
-    end[1] = '\0';
-    
     return str;
 }
