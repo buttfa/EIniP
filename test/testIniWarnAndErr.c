@@ -4,7 +4,8 @@
 
 TEST(testIniWarnAndErr, test0) {
     // 初始化测试用例
-    iniParseStat p_stat; memset(&p_stat, 0, sizeof(iniParseStat));
+    iniParseStat* p_stat= (iniParseStat*)malloc(sizeof(iniParseStat));
+    memset(p_stat, 0, sizeof(iniParseStat));
     int expections_warn_num = 0; // 预期警告
     int expections_warn_line[] = {};
     iniStat expections_warns[] = {};
@@ -24,12 +25,14 @@ TEST(testIniWarnAndErr, test0) {
                     expections_err_num,\
                     expections_err_line,\
                     expections_errs);
+    iniDestroyStat((iniParseStat**)&p_stat);
 }
 
 
 TEST(testIniWarnAndErr, test1) {
     // 初始化测试用例
-    iniParseStat p_stat; memset(&p_stat, 0, sizeof(iniParseStat));
+    iniParseStat* p_stat= (iniParseStat*)malloc(sizeof(iniParseStat));
+    memset(p_stat, 0, sizeof(iniParseStat));
     int expections_warn_num = 0; // 预期警告
     int expections_warn_line[] = {};
     iniStat expections_warns[] = {};
@@ -39,7 +42,7 @@ TEST(testIniWarnAndErr, test1) {
 
     // 运行待测函数
     section section_ptr;
-    handleIniWarnAndErr(&p_stat, &section_ptr, 1, (char*)"key1=");
+    handleIniWarnAndErr(p_stat, &section_ptr, 1, (char*)"key1=");
 
     // 检测结果
     checkWarnAndErr(p_stat,\
@@ -51,11 +54,13 @@ TEST(testIniWarnAndErr, test1) {
                     expections_err_num,\
                     expections_err_line,\
                     expections_errs);
+    iniDestroyStat((iniParseStat**)&p_stat);
 }
 
 TEST(testIniWarnAndErr, test2) {
     // 初始化测试用例
-    iniParseStat p_stat; memset(&p_stat, 0, sizeof(iniParseStat));
+    iniParseStat* p_stat= (iniParseStat*)malloc(sizeof(iniParseStat));
+    memset(p_stat, 0, sizeof(iniParseStat));
     int expections_warn_num = 0; // 预期警告
     int expections_warn_line[] = {};
     iniStat expections_warns[] = {};
@@ -65,7 +70,7 @@ TEST(testIniWarnAndErr, test2) {
 
     // 运行待测函数
     section section_ptr;
-    handleIniWarnAndErr(&p_stat, &section_ptr, 3, (char*)"key1");
+    handleIniWarnAndErr(p_stat, &section_ptr, 3, (char*)"key1");
 
     // 检测结果
     checkWarnAndErr(p_stat,\
@@ -77,11 +82,13 @@ TEST(testIniWarnAndErr, test2) {
                     expections_err_num,\
                     expections_err_line,\
                     expections_errs);
+    iniDestroyStat((iniParseStat**)&p_stat);
 }
 
 TEST(testIniWarnAndErr, test3) {
     // 初始化测试用例
-    iniParseStat p_stat; memset(&p_stat, 0, sizeof(iniParseStat));
+    iniParseStat* p_stat= (iniParseStat*)malloc(sizeof(iniParseStat));
+    memset(p_stat, 0, sizeof(iniParseStat));
     int expections_warn_num = 0; // 预期警告
     int expections_warn_line[] = {};
     iniStat expections_warns[] = {};
@@ -91,8 +98,8 @@ TEST(testIniWarnAndErr, test3) {
 
     // 运行待测函数
     section section_ptr;
-    handleIniWarnAndErr(&p_stat, &section_ptr, 1, (char*)"key1=");
-    handleIniWarnAndErr(&p_stat, &section_ptr, 3, (char*)"key1");
+    handleIniWarnAndErr(p_stat, &section_ptr, 1, (char*)"key1=");
+    handleIniWarnAndErr(p_stat, &section_ptr, 3, (char*)"key1");
 
     // 检测结果
     checkWarnAndErr(p_stat,\
@@ -104,11 +111,13 @@ TEST(testIniWarnAndErr, test3) {
                     expections_err_num,\
                     expections_err_line,\
                     expections_errs);
+    iniDestroyStat((iniParseStat**)&p_stat);
 }
 
 TEST(testIniWarnAndErr, test4) {
     // 初始化测试用例
-    iniParseStat p_stat; memset(&p_stat, 0, sizeof(iniParseStat));
+    iniParseStat* p_stat= (iniParseStat*)malloc(sizeof(iniParseStat));
+    memset(p_stat, 0, sizeof(iniParseStat));
     int expections_warn_num = 1; // 预期警告
     int expections_warn_line[] = {1};
     iniStat expections_warns[] = {INI_WARN_KVP_NOT_BELONG_SECTION};
@@ -118,9 +127,9 @@ TEST(testIniWarnAndErr, test4) {
 
     // 运行待测函数
     section section_ptr;
-    handleIniWarnAndErr(&p_stat, NULL, 1, (char*)"key1=value1");
-    handleIniWarnAndErr(&p_stat, &section_ptr, 2, (char*)"key2=");
-    handleIniWarnAndErr(&p_stat, &section_ptr, 3, (char*)"key3");
+    handleIniWarnAndErr(p_stat, NULL, 1, (char*)"key1=value1");
+    handleIniWarnAndErr(p_stat, &section_ptr, 2, (char*)"key2=");
+    handleIniWarnAndErr(p_stat, &section_ptr, 3, (char*)"key3");
 
     // 检测结果
     checkWarnAndErr(p_stat,\
@@ -132,11 +141,13 @@ TEST(testIniWarnAndErr, test4) {
                     expections_err_num,\
                     expections_err_line,\
                     expections_errs);
+    iniDestroyStat((iniParseStat**)&p_stat);
 }
 
 TEST(testIniWarnAndErr, test5) {
     // 初始化测试用例
-    iniParseStat p_stat; memset(&p_stat, 0, sizeof(iniParseStat));
+    iniParseStat* p_stat= (iniParseStat*)malloc(sizeof(iniParseStat));
+    memset(p_stat, 0, sizeof(iniParseStat));
     int expections_warn_num = 3; // 预期警告
     int expections_warn_line[] = {1, 1, 2};
     iniStat expections_warns[] = {INI_WARN_VALUE_EXIST_SPACE, INI_WARN_KVP_NOT_BELONG_SECTION, INI_WARN_KEY_EXIST_SPACE};
@@ -146,9 +157,9 @@ TEST(testIniWarnAndErr, test5) {
 
     // 运行待测函数
     section section_ptr;
-    handleIniWarnAndErr(&p_stat, NULL, 1, (char*)"key1=val ue1");
-    handleIniWarnAndErr(&p_stat, &section_ptr, 2, (char*)"k ey2=");
-    handleIniWarnAndErr(&p_stat, &section_ptr, 3, (char*)"key3");
+    handleIniWarnAndErr(p_stat, NULL, 1, (char*)"key1=val ue1");
+    handleIniWarnAndErr(p_stat, &section_ptr, 2, (char*)"k ey2=");
+    handleIniWarnAndErr(p_stat, &section_ptr, 3, (char*)"key3");
 
     // 检测结果
     checkWarnAndErr(p_stat,\
@@ -160,4 +171,5 @@ TEST(testIniWarnAndErr, test5) {
                     expections_err_num,\
                     expections_err_line,\
                     expections_errs);
+    iniDestroyStat((iniParseStat**)&p_stat);
 }

@@ -34,7 +34,7 @@ void checkIni(ini* ini_t, char**expections, int expections_num) {
  * @brief 检查iniParseStat的正确性
  * 
  */
-void checkWarnAndErr(iniParseStat p_stat,\
+void checkWarnAndErr(iniParseStat* p_stat,\
 \
                     int warn_num,\
                     int* warn_lines,\
@@ -44,26 +44,26 @@ void checkWarnAndErr(iniParseStat p_stat,\
                     int* err_lines,\
                     iniStat* errs) {
     // 判断警告和错误的数量是否正确
-    ASSERT_EQ(p_stat.warn_num, warn_num);
-    ASSERT_EQ(p_stat.error_num, err_num);
+    ASSERT_EQ(p_stat->warn_num, warn_num);
+    ASSERT_EQ(p_stat->error_num, err_num);
 
     // 判断警告和错误的内容是否正确
     // 警告
-    cout << "warn num: " << p_stat.warn_num << ", expection warn num: " << warn_num << endl;
+    cout << "warn num: " << p_stat->warn_num << ", expection warn num: " << warn_num << endl;
     for (int i = 0; i < warn_num; i++) {
-        EXPECT_EQ(p_stat.warn_lines[i], warn_lines[i]);
-        EXPECT_EQ(p_stat.warn_infos[i], warns[i]);
-        cout << "[" << i << "]warn line:           " << p_stat.warn_lines[i] << ", warn info:    " << p_stat.warn_infos[i] << endl;
+        EXPECT_EQ(p_stat->warn_lines[i], warn_lines[i]);
+        EXPECT_EQ(p_stat->warn_infos[i], warns[i]);
+        cout << "[" << i << "]warn line:           " << p_stat->warn_lines[i] << ", warn info:    " << p_stat->warn_infos[i] << endl;
         cout << "[" << i << "]expection warn line: " << warn_lines[i] << ", expection warn info: " << warns[i] << endl;
         cout << endl;
     }
     cout << endl;
     // 错误
-    cout << "err num: " << p_stat.error_num << ", expection err num: " << err_num << endl;
+    cout << "err num: " << p_stat->error_num << ", expection err num: " << err_num << endl;
     for (int i = 0; i < err_num; i++) {
-        EXPECT_EQ(p_stat.error_lines[i], err_lines[i]);
-        EXPECT_EQ(p_stat.error_infos[i], errs[i]);
-        cout << "[" << i << "]err line:           " << p_stat.error_lines[i] << ", err info:  " << p_stat.error_infos[i] << endl;
+        EXPECT_EQ(p_stat->error_lines[i], err_lines[i]);
+        EXPECT_EQ(p_stat->error_infos[i], errs[i]);
+        cout << "[" << i << "]err line:           " << p_stat->error_lines[i] << ", err info:  " << p_stat->error_infos[i] << endl;
         cout << "[" << i << "]expection err line: " << err_lines[i] << ", expection err info: " << errs[i] << endl;
         cout << endl;
     }

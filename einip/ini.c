@@ -81,11 +81,12 @@ ini* iniParseFile(char* file_path) {
     // 调用iniParse函数
     ini* ini_ptr = NULL;
     iniParseStat* p_stat = iniParse(stream, &ini_ptr);
+    iniStat stat = p_stat->stat;
     iniDestroyStat((iniParseStat**)&p_stat);
     fclose(stream);
     
     // 返回ini_ptr
-    if (p_stat->stat & INI_ERR)
+    if (stat & INI_ERR)
         return NULL; 
     return ini_ptr;
 }
@@ -109,11 +110,12 @@ ini* iniParseStr(char* str) {
     // 调用iniParse函数
     ini* ini_ptr = NULL;
     iniParseStat* p_stat = iniParse(stream, &ini_ptr);
+    iniStat stat = p_stat->stat;
     iniDestroyStat((iniParseStat**)&p_stat);
     fclose(stream);
     
     // 返回ini_ptr
-    if (p_stat->stat & INI_ERR)
+    if (stat & INI_ERR)
         return NULL; 
     return ini_ptr;
 }
@@ -218,7 +220,7 @@ void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, c
 iniParseStat* iniParse(FILE* stream, ini** ini_ptr) {
     // 创建iniParseStat结构体
     iniParseStat* p_stat = (iniParseStat*)malloc(sizeof(iniParseStat));
-    memset(&p_stat, 0, sizeof(iniParseStat));
+    memset(p_stat, 0, sizeof(iniParseStat));
 
     // 检查stream是否为空
     if (stream == NULL) {
@@ -298,14 +300,11 @@ iniStat iniFreeStat(iniParseStat* p_stat) {
         return INI_ERR_STAT_NOT_FOUND;
 
     // 释放警告和错误信息内存
-    for (int i = 0; i < p_stat->error_num; i++) {
-        free(p_stat->error_infos[i]);
-        free(p_stat->error_lines[i]);
-    }
-    for (int i = 0; i < p_stat->warn_num; i++) {
-        free(p_stat->warn_infos[i]);
-        free(p_stat->warn_lines[i]);
-    }
+    free(p_stat->error_infos);
+    free(p_stat->error_lines);
+    free(p_stat->warn_infos);
+    free(p_stat->warn_lines);
+
     free(p_stat);
     return INI_OK;
 }
