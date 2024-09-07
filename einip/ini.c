@@ -577,7 +577,7 @@ iniStat iniDelSection(ini* ini_ptr, char* section_name) {
         return INI_ERR_SECTION_NOT_FOUND;
 
     // 遍历INI结构体中的sections数组，找到要删除的section的位置
-    for (int i = 0; i < ini_ptr->section_num; i++) {
+    for (int i = ini_ptr->section_num-1; i >= 0; i--) {
         if (strcmp(ini_ptr->sections[i]->name, section_name) == 0) {
             section* section_ptr = ini_ptr->sections[i];
             // 释放section中的kvps
@@ -625,7 +625,7 @@ iniStat iniDelKvp(section* section_ptr, char* key) {
         return INI_ERR_KEY_NOT_FOUND;
 
     // 遍历section中的kvps数组，查找给定的key
-    for (int i = 0; i < section_ptr->kvp_num; i++) {
+    for (int i = section_ptr->kvp_num-1; i >= 0; i--) {
         if (strcmp(section_ptr->kvps[i]->key, key) == 0) {
             // 释放key和value的内存
             free(section_ptr->kvps[i]->key);
