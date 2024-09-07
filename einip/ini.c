@@ -260,8 +260,6 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
             if (strchr(tmp+1, ' ') != NULL)
                 addIniWarning(&p_stat, row, INI_WARN_SECTION_EXIST_SPACE);
 
-            // 清空缓存区
-            memset(buf, 0, sizeof(buf));
             continue;
         }
 
@@ -281,16 +279,6 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
         
         // 将key-value添加到section中
         iniAddKvp(section_ptr, trim(tmp), trim(equal_pos+1));
-        // if (iniGetKvp(section_ptr, trim(tmp)) == NULL) {
-        //     // 添加key-value对
-        //     iniAddKvp(section_ptr, trim(tmp), trim(equal_pos+1));
-        // } else {
-        //     // 更新key-value对
-        //     iniSetValue(section_ptr, trim(tmp), trim(equal_pos+1));
-        // }
-
-        // 清空缓存区
-        memset(buf, 0, sizeof(buf));
     }
     return p_stat;
 }
