@@ -28,6 +28,7 @@ typedef enum INISTAT{
     INI_WARN_KEY_EXIST_SPACE,
     INI_WARN_VALUE_EXIST_SPACE,
     INI_ERR = 0x80, // 1000_0000
+    INI_ERR_STAT_NOT_FOUND,
     INI_ERR_UNKNOWN_LINE,
     INI_ERR_KEY_IS_EMPTY,
     INI_ERR_VALUE_IS_EMPTY,
@@ -121,9 +122,27 @@ void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, c
  * 
  * @param stream 需要读取的stream
  * @param ini_ptr 需要存入的ini结构体二级指针
- * @return iniParseStat 该结构体详细说明了警告和错误情况
+ * @return iniParseStat* 该结构体详细说明了警告和错误情况
  */
-iniParseStat iniParse(FILE* stream, ini** ini_ptr);
+iniParseStat* iniParse(FILE* stream, ini** ini_ptr);
+
+/**
+ * @brief 释放inParseStat内存
+ * 
+ * @param p_stat 需要释放的iniParseStat指针
+ * @return iniStat 返回INI_OK表示成功释放，
+ *                 返回INI_ERR_STAT_NOT_FOUND表示p_stat为空指针
+ */
+iniStat iniFreeStat(iniParseStat* p_stat);
+
+/**
+ * @brief 释放iniParseStat内存，并将p_stat置为NULL
+ * 
+ * @param p_stat 需要释放的iniParseStat指针
+ * @return iniStat 返回INI_OK表示成功释放，
+ *                 返回INI_ERR_STAT_NOT_FOUND表示p_stat为空指针
+ */
+iniStat iniDestroyStat(iniParseStat** p_stat);
 
 /**
  * @brief 释放ini内存
@@ -133,6 +152,15 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr);
  *                 返回INI_ERR_INI_NOT_FOUND表示该ini_ptr为空指针
  */
 iniStat iniFree(ini* ini_ptr);
+
+/**
+ * @brief 释放ini内存，并将ini_ptr置为NULL
+ * 
+ * @param ini_ptr 需要释放的ini
+ * @return iniStat 返回INI_OK表示成功释放，
+ *                 返回INI_ERR_INI_NOT_FOUND表示ini_ptr为空指针
+ */
+iniStat iniDestroy(ini** ini_ptr);
 
 /**
  * @brief 获取ini_ptr中最后一个同section_name的section

@@ -80,11 +80,12 @@ ini* iniParseFile(char* file_path) {
     
     // 调用iniParse函数
     ini* ini_ptr = NULL;
-    iniParseStat p_stat = iniParse(stream, &ini_ptr);
+    iniParseStat* p_stat = iniParse(stream, &ini_ptr);
+    iniDestroyStat((iniParseStat**)&p_stat);
     fclose(stream);
     
     // 返回ini_ptr
-    if (p_stat.stat & INI_ERR)
+    if (p_stat->stat & INI_ERR)
         return NULL; 
     return ini_ptr;
 }
@@ -107,11 +108,12 @@ ini* iniParseStr(char* str) {
 
     // 调用iniParse函数
     ini* ini_ptr = NULL;
-    iniParseStat p_stat = iniParse(stream, &ini_ptr);
+    iniParseStat* p_stat = iniParse(stream, &ini_ptr);
+    iniDestroyStat((iniParseStat**)&p_stat);
     fclose(stream);
     
     // 返回ini_ptr
-    if (p_stat.stat & INI_ERR)
+    if (p_stat->stat & INI_ERR)
         return NULL; 
     return ini_ptr;
 }
@@ -211,16 +213,16 @@ void handleIniWarnAndErr(iniParseStat* p_stat, section* section_ptr, int line, c
  * 
  * @param stream 需要读取的stream
  * @param ini_ptr 需要存入的ini结构体二级指针
- * @return iniParseStat 该结构体详细说明了警告和错误情况
+ * @return iniParseStat* 该结构体详细说明了警告和错误情况
  */
-iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
+iniParseStat* iniParse(FILE* stream, ini** ini_ptr) {
     // 创建iniParseStat结构体
-    iniParseStat p_stat;
+    iniParseStat* p_stat = (iniParseStat*)malloc(sizeof(iniParseStat));
     memset(&p_stat, 0, sizeof(iniParseStat));
 
     // 检查stream是否为空
     if (stream == NULL) {
-        p_stat.stat = INI_ERR_STREAM_NOT_FOUND;
+        p_stat->stat = INI_ERR_STREAM_NOT_FOUND;
         return p_stat;
     }
 
@@ -258,15 +260,15 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
             section_ptr = iniGetSection(*ini_ptr, tmp+1);
             // 如果新seciont_name中存在空格，则产生INI_WARN_SECTION_EXIST_SPACE警告
             if (strchr(tmp+1, ' ') != NULL)
-                addIniWarning(&p_stat, row, INI_WARN_SECTION_EXIST_SPACE);
+                addIniWarning(p_stat, row, INI_WARN_SECTION_EXIST_SPACE);
 
             continue;
         }
 
         int index = 0, key_index = 0, value_index = 0;
         // 判断是否是key-value，如果不满足条件，则跳过
-        handleIniWarnAndErr(&p_stat, section_ptr, row, tmp);
-        if ((int)p_stat.stat & (int)INI_ERR) 
+        handleIniWarnAndErr(p_stat, section_ptr, row, tmp);
+        if ((int)p_stat->stat & (int)INI_ERR) 
             continue;
 
         // 找到=字符
@@ -281,6 +283,44 @@ iniParseStat iniParse(FILE* stream, ini** ini_ptr) {
         iniAddKvp(section_ptr, trim(tmp), trim(equal_pos+1));
     }
     return p_stat;
+}
+
+/**
+ * @brief 释放inParseStat内存
+ * 
+ * @param p_stat 需要释放的iniParseStat指针
+ * @return iniStat 返回INI_OK表示成功释放，
+ *                 返回INI_ERR_STAT_NOT_FOUND表示p_stat为空指针
+ */
+iniStat iniFreeStat(iniParseStat* p_stat) {
+    // 判断p_stat是否为空指针
+    if (p_stat == NULL)
+        return INI_ERR_STAT_NOT_FOUND;
+
+    // 释放警告和错误信息内存
+    for (int i = 0; i < p_stat->error_num; i++) {
+        free(p_stat->error_infos[i]);
+        free(p_stat->error_lines[i]);
+    }
+    for (int i = 0; i < p_stat->warn_num; i++) {
+        free(p_stat->warn_infos[i]);
+        free(p_stat->warn_lines[i]);
+    }
+    free(p_stat);
+    return INI_OK;
+}
+
+/**
+ * @brief 释放iniParseStat内存，并将p_stat置为NULL
+ * 
+ * @param p_stat 需要释放的iniParseStat指针
+ * @return iniStat 返回INI_OK表示成功释放，
+ *                 返回INI_ERR_STAT_NOT_FOUND表示p_stat为空指针
+ */
+iniStat iniDestroyStat(iniParseStat** p_stat) {
+    iniStat stat = iniFreeStat(*p_stat);
+    *p_stat = (stat == INI_OK) ? NULL : *p_stat;
+    return stat;
 }
 
 /**
@@ -316,6 +356,19 @@ iniStat iniFree(ini* ini_ptr) {
     free(ini_ptr); // 最后释放ini结构体内存
 
     return INI_OK;
+}
+
+/**
+ * @brief 释放ini内存，并将ini_ptr置为NULL
+ * 
+ * @param ini_ptr 需要释放的ini
+ * @return iniStat 返回INI_OK表示成功释放，
+ *                 返回INI_ERR_INI_NOT_FOUND表示ini_ptr为空指针
+ */
+iniStat iniDestroy(ini** ini_ptr) {
+    iniStat stat = iniFree(*ini_ptr);
+    *ini_ptr = (stat == INI_OK) ? NULL : *ini_ptr;
+    return stat;
 }
 
 /**
