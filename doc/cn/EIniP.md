@@ -74,15 +74,15 @@ int main(){
 #### 二、获取操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
-|section* iniGetSection(ini* ini_ptr ,char* section_name)|返回ini_ptr中的指定section_name的section，若ini_ptr非法或段不存在则返回NULL。如果出现相同的section_name则返回最后一个同section_name的section||
+|section* iniGetSection(ini* ini_ptr ,char* section_name)|返回ini_ptr中的指定section_name的section，若ini_ptr非法或section不存在则返回NULL。如果出现相同的section_name则返回最后一个同section_name的section||
 |char* iniGetValue(section* section_ptr ,char* key)|返回section_ptr中指定key的值的地址，若不存在则返回NULL。如果出现相同的键名则返回最后一个同键名的value||
 |kvp* iniGetKvp(section* section_ptr ,char* key)|返回section_ptr中指定key的kvp的地址，若不存在则返回NULL。如果出现相同的键名则返回最后一个同键名的kvp||
 
 #### 三、设置操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
-|iniStat iniSetSection(ini* ini_ptr ,char* section_name, char* target_name)|将ini_ptr中section_name的section名设置为target_name。如果出现相同的section_name则只修改最后一个同section_name的section的name。若段不存在则返回INI_ERR_SECTION_NOT_FOUND||
-|iniStat iniSetValue(section* section_ptr ,char* key ,char* value)|将section_ptr中指定key的值设置为value。如果出现相同的键名只修改最后一个同键名的kvp的value。若段不存在则返回INI_ERR_SECTION_NOT_FOUND，若键值对不存在则返回INI_ERR_KEY_NOT_FOUND||
+|iniStat iniSetSection(ini* ini_ptr ,char* section_name, char* target_name)|将ini_ptr中section_name的section名设置为target_name。如果出现相同的section_name则只修改最后一个同section_name的section的name。若section不存在则返回INI_ERR_SECTION_NOT_FOUND||
+|iniStat iniSetValue(section* section_ptr ,char* key ,char* value)|将section_ptr中指定key的值设置为value。如果出现相同的键名只修改最后一个同键名的kvp的value。若section不存在则返回INI_ERR_SECTION_NOT_FOUND，若键值对不存在则返回INI_ERR_KEY_NOT_FOUND||
 
 #### 四、添加操作相关函数
 |函数声明|函数作用|注意|
@@ -93,7 +93,7 @@ int main(){
 #### 五、删除操作相关函数
 |函数声明|函数作用|注意|
 |:-|:-|:-|
-|iniStat iniDelSection(ini* ini_ptr , char* section_name)|删除ini_ptr中指定section_name的section，若不存在则返回INI_ERR_SECTION_NOT_FOUND。如果出现相同section_name的section，则只删除最后一个同名的section。||、
+|iniStat iniDelSection(ini* ini_ptr , char* section_name)|删除ini_ptr中指定section_name的section，若不存在则返回INI_ERR_SECTION_NOT_FOUND。如果出现相同section_name的section，则只删除最后一个同名的section。||
 |iniStat iniDelKvp(section* section_ptr ,char* key)|删除section_ptr中指定key的key-value pair，若不存在则返回INI_ERR_KEY_NOT_FOUND。如果出现相同的键名，则只删除最后一个同键名的kvp。||
 
 #### 六、保存操作相关函数
@@ -113,6 +113,7 @@ int main(){
 |INI_WARN_KEY_EXIST_SPACE|key中存在空格|
 |INI_WARN_VALUE_EXIST_SPACE|value中存在空格|
 |INI_ERR|ini函数操作错误|0x80 / 1000_0000|
+|INI_ERR_STAT_NOT_FOUND|iniStat为非法值或无效||
 |INI_ERR_UNKNOWN_LINE|出现未知字符串|
 |INI_ERR_KEY_IS_EMPTY|kvp中的key为空|
 |INI_ERR_VALUE_IS_EMPTY|kvp中的value为空|
@@ -126,19 +127,31 @@ int main(){
 ## ini相关结构体
 ```c
 // 以下结构体，依次存储key-value对、section、ini
+/**
+ * @brief key-value对
+ * 
+ */
 typedef struct KVP{
     char* key;
     char* value;
 }kvp;
 
+/**
+ * @brief ini文件的section
+ * 
+ */
 typedef struct SECTION{
     char* name;
     int kvp_num;
-    struct KVP* kvps[];
+    struct KVP** kvps;
 }section;
 
+/**
+ * @brief 存储ini文件内容的结构体 
+ * 
+ */
 typedef struct INI{ 
     int section_num;
-    struct SECTION* sections[];
+    struct SECTION** sections;
 }ini;
 ```

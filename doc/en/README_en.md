@@ -6,12 +6,12 @@
 - [Usage method](#usage-method)
 
 ## Project Name
-#### EINIP / Easy initialization file parser
+#### EIniP / Easy initialization file parser
 
 ## Project Introduction
-#### Lightweight, no dependencies (referring to dependencies outside of standard libraries) Initialization file (INI file) parser, suitable for C/C++.
+#### Lightweight, no dependencies (referring to dependencies outside of standard libraries) initialization file (INI file) parser, suitable for C/C++.
 
 ## Usage method
-#### （1） The source and header files of the EIniP library are located in the [einip directory](../../einip/).
-#### （2） Add header file # include "ini. h" to the engineering file
-#### （3） Simply call the relevant functions, please refer to [EIniP library usage instructions](EIniP_en.md) for details
+#### （1） The source and header files of the EIniP library are located in the [einip directory](../../einip/).Please add them to the project.
+#### （2） Add header file ```#include "ini.h"``` to the engineering file.
+#### （3） Call the relevant functions, please refer to [EIniP library usage instructions](EIniP_en.md) for details

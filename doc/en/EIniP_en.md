@@ -61,50 +61,50 @@ int main(){
 
 ## Function resolution
 #### 1、 Retrieve and release operation related functions
-|Function Declaration | Function Function Function | Attention|
+|Function Declaration|Function role|Note|
 |:-|:-|:-|
-|Ini * iniParseFile (char * file_math) | Parse the file_math file and return the parsing result. During parsing, sections are merged and key value pairs are overwritten.||
-|Ini * iniParseStr (char * str) |Parse the str string and return the parsing result. During parsing, sections are merged and key value pairs are overwritten.||
-|iniParseStat* iniParse(FILE* stream, ini* ini_ptr)|Parse the stream and save the parsing result to ini_ptr. During parsing, sections are merged and key value pairs are overwritten.|The returned iniParseStat provides a detailed explanation of warning and error situations|
-|IniStat iniFree (ini * ini_ptr) | Release the memory pointed to by ini_ptr||
+|ini* iniParseFile(char* file_path)|Parse the file and return the parsing result. During parsing, sections are merged and key value pairs are overwritten phonily.||
+|ini* iniParseStr(char* str)|Parse the string and return the parsing result. During parsing, sections are merged and key value pairs are overwritten phonily.||
+|iniParseStat* iniParse(FILE* stream, ini* ini_ptr)|Parse the stream and save the parsing result to ini_ptr. During parsing, sections are merged and key value pairs are overwritten phonily.|The returned iniParseStat provides a detailed explanation of warning and error situations|
+|iniStat iniFree(ini* ini_ptr)| Release the memory pointed to by ini_ptr||
 |iniStat iniDestroy(ini** ini_ptr)|Release ini memory and set ini_ptr to NULL||
 |iniStat iniFreeStat(iniParseStat* p_stat)|Release inParseStat memory||
 |iniStat iniDestroyStat(iniParseStat** p_stat)|Release iniParseStat memory and set p_stat to NULL||
 
 #### 2、 Get operation related functions
-|Function Declaration | Function Function Function | Attention|
+|Function Declaration|Function role|Note|
 |:-|:-|:-|
-|Section * iniGetSection (ini * ini_ptr, char * section_2) | Returns the section with the specified section_2 in ini_ptr. If ini_ptr is illegal or the section does not exist, returns NULL. If the same section_2 appears, return the last section with the same section_2||
-|Char * iniGetValue (section * section_ptr, char * key) | Return the address of the value of the specified key in section_ptr. If it does not exist, return NULL. If the same key name appears, return the last value with the same key name||
-|Kvp * iniGetKvp (section * section_ptr, char * key) | Return the address of the kvp with the specified key in section_ptr. If it does not exist, return NULL. If the same key name appears, return the last kvp with the same key name||
+|section* iniGetSection(ini* ini_ptr ,char* section_name)|Returns the section with the specified section_name in ini_ptr. If ini_ptr is illegal or the section does not exist, returns NULL. If the same section_name appears, return the last section with the same section_name||
+|char* iniGetValue(section* section_ptr ,char* key)| Return the address of the value of the specified key in section_ptr. If it does not exist, return NULL. If the same key name appears, return the last value with the same key name||
+|kvp* iniGetKvp(section* section_ptr ,char* key)| Return the address of the kvp with the specified key in section_ptr. If it does not exist, return NULL. If the same key name appears, return the last kvp with the same key name||
 
 #### 3、 Set operation related functions
-|Function Declaration | Function Function Function | Attention|
+|Function Declaration|Function role|Note|
 |:-|:-|:-|
-|IniStat initSection (ini * ini_ptr, char * section_2, char * target_2) | Set the section name of section_2 in ini_ptr to target_2. If the same section_2 appears, only modify the name of the last section with the same section_2. If the segment does not exist, return INI_SRR_SELECTION NOT NOT FOUND||
-|IniStat iniSetValue (section * section_ptr, char * key, char * value) | Set the value of the specified key in section_ptr to value. If the same key name appears, only modify the value of the last kvp with the same key name. If the segment does not exist, return INI-ERR_SELECTION NOT NOT FOUND. If the key value pair does not exist, return INI-ERR_KEY_SNOT NOT FOUND||
+|iniStat iniSetSection(ini* ini_ptr ,char* section_name, char* target_name)|Set the section name of section_name in ini_ptr to target_name. If the same section_name appears, only modify the name of the last section with the same section_name. If the section does not exist, return INI_ERR_SECTION_NOT_FOUND||
+|iniStat iniSetValue(section* section_ptr ,char* key ,char* value)|Set the value of the specified key in section_ptr to value. If the same key name appears, only modify the value of the last kvp with the same key name. If the section does not exist, return INI_ERR_SECTION_NOT_FOUND. If the key value pair does not exist, return INI_ERR_KEY_NOT_FOUND||
 
 #### 4、 Add operation related functions
-|Function Declaration | Function Function Function | Attention|
+|Function Declaration|Function role|Note|
 |:-|:-|:-|
-|IniStat iniAddSection (ini * ini_ptr, char * section_2) | Add a section to ini_ptr and append it directly to the end of the section. If the same section_2 appears, use the iniGets section function to obtain the last section with the same section_2, achieving a similar overlay effect||
-|IniStat iniAddKvp (section * section_ptr, char * key, char * value) | Add a key value pair in section_ptr, and the new kvp will be added at the end of kvps. If the same kvp appears, use the iniGetKvp and iniGetValue functions to obtain the last kvp with the same name, achieving a similar coverage effect||
+|iniStat iniAddSection(ini* ini_ptr , char* section_name)|Add a section to ini_ptr and append it directly to the end of the sections. If the same section_name appears, obtain the last section with the same section_name when use the iniGetSection function, achieving a similar overlay effect||
+|iniStat iniAddKvp(section* section_ptr ,char* key ,char* value)|Add a key value pair in section_ptr, and the new kvp will be added at the end of kvps. If the same kvp appears, obtain the last kvp with the same name when use the iniGetKvp and iniGetValue functions, achieving a similar coverage effect||
 
 #### 5、 Delete operation related functions
-|Function Declaration | Function Function Function | Attention|
+|Function Declaration|Function role|Note|
 |:-|:-|:-|
-|IniStat iniDelSection (ini * ini_ptr, char * section_2) | Delete the section with the specified section_2 in ini_ptr. If it does not exist, return INI-ERR_SELECTION. NOT_SFOUND. If there are sections with the same section_2, only the last section with the same name will be deleted
-|IniStat iniDelKvp (section * section_ptr, char * key) | Delete the key value pair for the specified key in section_ptr. If it does not exist, return INI-ERR_KEYSinoT_FOUND. If the same key name appears, only the last kvp with the same key name will be deleted||
+|iniStat iniDelSection(ini* ini_ptr , char* section_name)|Delete the section with the specified section_name in ini_ptr. If it does not exist, return INI_ERR_SECTION_NOT_FOUND. If there are sections with the same section_name, only the last section with the same name will be deleted||
+|iniStat iniDelKvp(section* section_ptr ,char* key)|Delete the key value pair for the specified key in section_ptr. If it does not exist, return INI_ERR_KEY_NOT_FOUND. If the same key name appears, only the last kvp with the same key name will be deleted||
 
 #### 6、 Save operation related functions
-|Function Declaration | Function Function Function | Attention|
+|Function Declaration|Function role|Note|
 |:-|:-|:-|
-|IniStat iniSaveFile (ini * ini_ptr, char * file_dath) | Save the ini data in ini_ptr to the file_dath file||
-|Char * iniSaveStr (ini * ini_ptr) | Returns the ini data in ini_ptr as a string, and returns NULL if the operation fails| The returned string is dynamically allocated, please release it promptly after use|
+|iniStat iniSaveFile(ini* ini_ptr ,char* file_path)|Save the ini data in ini_ptr to the file_path file||
+|char* iniSaveStr(ini* ini_ptr)|Returns the ini data in ini_ptr as a string, and returns NULL if the operation fails|The returned string is dynamically allocated, please release it promptly after use|
 
 ## IniStat enumeration type
 #### Function: Used to indicate the return value of most einip functions and to indicate the execution status of einip functions
-|Member Name | Meaning | Value|
+|Member Name|Meaning|Value|
 |:-|:-|:-|
 |INI_OK|The ini function operation was successful|0x00 / 0000_0000|
 |INI_WARN|Ini function operation warning|0x40 / 0100_0000|
@@ -112,7 +112,8 @@ int main(){
 |INI_WARN_SECTION_EXIST_SPACE|There are spaces in section_name|
 |INI_WARN_KEY_EXIST_SPACE|There are spaces in the key|
 |INI_WARN_VALUE_EXIST_SPACE|There are spaces in the value|
-|INI_ERR|INI function operation error|0x80 / 1000_0000|
+|INI_ERR|Ini function operation error|0x80 / 1000_0000|
+|INI_ERR_STAT_NOT_FOUND|IniStat is an illegal or invalid value||
 |INI_ERR_UNKNOWN_LINE|Unknown string appears|
 |INI_ERR_KEY_IS_EMPTY|The key in kvp is empty|
 |INI_ERR_VALUE_IS_EMPTY|The value in kvp is empty|
@@ -126,19 +127,31 @@ int main(){
 ## Ini related structures
 ```c
 // The following structure stores key value pairs, sections, and ini in sequence
+/**
+ * @brief Key value pair
+ * 
+ */
 typedef struct KVP{
     char* key;
     char* value;
 }kvp;
 
+/**
+ * @brief Section of ini file
+ * 
+ */
 typedef struct SECTION{
     char* name;
     int kvp_num;
-    struct KVP* kvps[];
+    struct KVP** kvps;
 }section;
 
+/**
+ * @brief  Structure for storing ini file content
+ * 
+ */
 typedef struct INI{ 
     int section_num;
-    struct SECTION* sections[];
+    struct SECTION** sections;
 }ini;
 ```
