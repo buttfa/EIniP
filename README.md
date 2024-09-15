@@ -1,17 +1,17 @@
-### <div align="center">|[简体中文](README.md)|[English](doc/en/README_en.md)|</div>
+### <div align="center">|[简体中文](doc/cn/README.md)|[English](README.md)|</div>
 
-## <div align="center">目录</div> 
-- [项目名称](#项目名称)
-- [项目介绍](#项目介绍)
-- [使用方法](#使用方法)
-       
-## 项目名称 
-#### EIniP / Easy initialization file parser 
+## <div align="center">Directory</div>
+- [Project Name](#project-name)
+- [Project Introduction](#project-introduction)
+- [Usage method](#usage-method)
 
-## 项目介绍
-#### 轻量级、无依赖（指无标准库以外的依赖）Initialization file（INI文件）解析器，适用于C/C++。
- 
-## 使用方法
-#### （一）EIniP库的源文件和头文件位于[einip目录](einip)下，请将其添加到工程中。
-#### （二）在工程文件中添加头文件```#include "ini.h"```。
-#### （三）调用相关函数即可，详情参见[EIniP库使用说明](doc/cn/EIniP.md)
+## Project Name
+#### EIniP / Easy initialization file parser
+
+## Project Introduction
+#### Lightweight, no dependencies (referring to dependencies outside of standard libraries) initialization file (INI file) parser, suitable for C/C++.
+
+## Usage method
+#### （1） The source and header files of the EIniP library are located in the [einip directory](einip).Please add them to the project.
+#### （2） Add header file ```#include "ini.h"``` to the engineering file.
+#### （3） Call the relevant functions, please refer to [EIniP library usage instructions](doc/en/EIniP_en.md) for details
