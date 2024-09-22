@@ -7,7 +7,7 @@ allTest:
 testIniParse:
 	@echo "test iniParse function"
 # 编译testIniParse测试单元
-	g++ -o testIniParse testIniParse.cpp ../einip/ini.c -I ../einip -lgtest -lgtest_main -w
+	g++ -o testIniParse testIniParse.cpp ../einip/ini.c -I ../einip -lgtest -lgtest_main -W -Wall
 # 执行testIniParse测试单元
 	./testIniParse
 # 删除testIniParse测试单元
@@ -16,7 +16,7 @@ testIniParse:
 testIniDel:
 	@echo "test iniDel function"
 # 编译testIniDel测试单元
-	g++ -o testIniDel testIniDel.cpp ../einip/ini.c -I ../einip -lgtest -lgtest_main -w
+	g++ -o testIniDel testIniDel.cpp ../einip/ini.c -I ../einip -lgtest -lgtest_main -W -Wall
 # 执行testIniDel测试单元
 	./testIniDel
 # 删除testIniDel测试单元
@@ -25,7 +25,7 @@ testIniDel:
 testIniSave:
 	@echo "test iniSave function"
 # 编译testIniSave测试单元
-	g++ -o testIniSave testIniSave.cpp ../einip/ini.c -I ../einip -lgtest -lgtest_main -w
+	g++ -o testIniSave testIniSave.cpp ../einip/ini.c -I ../einip -lgtest -lgtest_main -W -Wall
 # 执行testIniSave测试单元
 	./testIniSave
 # 删除testIniSave测试单元
@@ -34,7 +34,7 @@ testIniSave:
 testIniWarnAndErr:
 	@echo "test iniWarnAndErr function"
 # 编译testIniWarnAndErr测试单元
-	g++ -o testIniWarnAndErr testIniWarnAndErr.cpp ../einip/ini.c -I ../einip -lgtest -lgtest_main -w
+	g++ -o testIniWarnAndErr testIniWarnAndErr.cpp ../einip/ini.c -I ../einip -lgtest -lgtest_main -W -Wall
 # 执行testIniWarnAndErr测试单元
 	./testIniWarnAndErr
 # 删除testIniWarnAndErr测试单元

@@ -236,7 +236,6 @@ iniParseStat* iniParse(FILE* stream, ini** ini_ptr) {
 
     char buf[1024];              // 缓存区
     section *section_ptr = NULL; // section指针
-    kvp* kvp_ptr = NULL;         // kvp指针
     int row = 0;                 // 行数
     while (fgets(buf, sizeof(buf), stream) != NULL) {
         // 去除行首和行尾的空格及行尾的回车符
@@ -267,7 +266,6 @@ iniParseStat* iniParse(FILE* stream, ini** ini_ptr) {
             continue;
         }
 
-        int index = 0, key_index = 0, value_index = 0;
         // 判断是否是key-value，如果不满足条件，则跳过
         handleIniWarnAndErr(p_stat, section_ptr, row, tmp);
         if ((int)p_stat->stat & (int)INI_ERR) 

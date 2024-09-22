@@ -73,10 +73,10 @@ TEST(testDel, test3) {
                         [section1]\n      \
                         key2 = Change";
     char* expections[] = {(char*)"section1",
-                     "key2", "value2",
-                     "key2", "Change", 
+                     (char*)"key2", (char*)"value2",
+                     (char*)"key2", (char*)"Change", 
                      
-                     "section2"};
+                     (char*)"section2"};
     
     // 运行结果
     FILE* stream = fmemopen(str, strlen(str), "r");
